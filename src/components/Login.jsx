@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 import { useAuth } from '../hooks/useAuth'
 import { useLanguage } from '../hooks/useLanguage'
 import usersData from '../data/users.json'
@@ -17,6 +18,9 @@ const ROLE_LABELS = {
   private_client: 'Cliente',
   lawyer: 'Abogado',
 }
+
+const inputClasses =
+  'rounded-lg border border-border px-4 py-3 text-sm text-foreground placeholder:text-foreground/40 transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20'
 
 function Login() {
   const [searchParams] = useSearchParams()
@@ -54,43 +58,45 @@ function Login() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex items-center justify-between">
-          <span className="text-lg font-bold text-slate-800">Experiencia Legal</span>
+          <span className="font-heading text-xl font-semibold text-primary">
+            Experiencia Legal
+          </span>
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="rounded-md border border-slate-300 px-2 py-1 text-sm"
+            className="cursor-pointer rounded-md border border-border px-2 py-1 text-sm transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
           >
             <option value="es">ES</option>
             <option value="en">EN</option>
           </select>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h1 className="text-xl font-semibold text-slate-800">Inicia sesión</h1>
-          <p className="mt-1 text-sm text-slate-500">Tipo: {ROLE_LABELS[role] || role}</p>
+        <div className="rounded-xl border border-border bg-white p-6 shadow-[var(--shadow-elevation-md)]">
+          <h1 className="font-heading text-xl font-semibold text-foreground">Inicia sesión</h1>
+          <p className="mt-1 text-sm text-foreground/60">Tipo: {ROLE_LABELS[role] || role}</p>
 
-          <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-3">
+          <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-3">
             <input
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+              className={inputClasses}
             />
             <input
               type="password"
               placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+              className={inputClasses}
             />
-            {error && <p className="text-sm text-red-600">{error}</p>}
+            {error && <p className="text-sm text-destructive">{error}</p>}
             <button
               type="submit"
-              className="mt-1 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+              className="mt-1 cursor-pointer rounded-lg bg-accent px-4 py-3 text-sm font-semibold text-accent-foreground transition-all duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               Iniciar sesión
             </button>
@@ -99,14 +105,18 @@ function Login() {
           <button
             type="button"
             onClick={fillDemo}
-            className="mt-3 text-xs text-slate-500 underline hover:text-slate-700"
+            className="mt-3 cursor-pointer text-xs font-medium text-foreground/50 underline decoration-dotted underline-offset-2 transition-colors duration-200 hover:text-primary"
           >
             Usar credenciales de demo
           </button>
         </div>
 
-        <Link to="/" className="mt-4 block text-center text-sm text-slate-500 hover:text-slate-700">
-          ← Volver
+        <Link
+          to="/"
+          className="mt-4 flex cursor-pointer items-center justify-center gap-1.5 text-sm font-medium text-foreground/60 transition-colors duration-200 hover:text-primary"
+        >
+          <ArrowLeftIcon className="h-4 w-4" />
+          Volver
         </Link>
       </div>
     </div>
