@@ -1,0 +1,28 @@
+{
+  "expedientes": [
+    {
+      "id": "EXP-2024-001",
+      "cliente": "Juan Pérez García",
+      "email_cliente": "juan@demo.com",
+      "tipo_caso": "Laboral",
+      "estado": "En investigación",
+      "fecha_inicio": "2024-01-15",
+      "proxima_audiencia": "2024-08-20T10:00:00Z",
+      "abogado": "Lic. María López",
+      "documentos": 3,
+      "hash_cliente": "abc123xyz"
+    },
+    {
+      "id": "EXP-2024-002",
+      "cliente": "María García Reyes",
+      "email_cliente": "mgarcia@demo.com",
+      "tipo_caso": "Civil",
+      "estado": "En juicio",
+      "fecha_inicio": "2024-03-01",
+      "proxima_audiencia": "2024-09-15T14:30:00Z",
+      "abogado": "Lic. María López",
+      "documentos": 5,
+      "hash_cliente": "def456uvw"
+    }
+  ]
+}

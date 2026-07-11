@@ -1,0 +1,26 @@
+{
+  "generic_not_found": {
+    "tourist": {
+      "es": "No encontré información específica sobre eso en nuestra base legal. Te recomiendo contactar a un abogado para una respuesta precisa.\n\n¿Hay algo más que necesites?",
+      "en": "I couldn't find specific information about that in our legal database. I recommend contacting a lawyer for a precise answer.\n\nIs there anything else you need?"
+    },
+    "hotelier": {
+      "es": "No encontré información específica sobre eso. Te sugiero agendar una asesoría con nuestro equipo para revisarlo a detalle.\n\n¿Hay algo más que necesites?",
+      "en": "I couldn't find specific information about that. I suggest scheduling an advisory session with our team to review it in detail.\n\nIs there anything else you need?"
+    }
+  },
+  "cta": {
+    "es": "¿Hay algo más que necesites?",
+    "en": "Is there anything else you need?"
+  },
+  "blocked_strategy": {
+    "es": "Entiendo tu preocupación, {cliente}. Para decisiones estratégicas, lo mejor es hablar directamente con {abogado}.\n\nMientras tanto, aquí va lo que puedo confirmar:\n- Estado: {estado}\n- Próxima audiencia: {proxima_audiencia}\n\n¿Quieres que enviemos un mensaje a {abogado}?",
+    "en": "I understand your concern, {cliente}. For strategic decisions, it's best to speak directly with {abogado}.\n\nMeanwhile, here's what I can confirm:\n- Status: {estado}\n- Next hearing: {proxima_audiencia}\n\nWould you like me to send a message to {abogado}?"
+  },
+  "expediente_not_found": {
+    "es": "No encontré esa información en tu expediente. ¿Quieres que contacte a tu abogado?",
+    "en": "I couldn't find that information in your case file. Would you like me to contact your lawyer?"
+  },
+  "blocked_keywords": ["ganar", "estrategia", "defensa", "costo", "justo", "engaño", "qué hacer", "recomendación", "chances", "posibilidad"],
+  "allowed_keywords": ["etapa", "audiencia", "documento", "qué pasó", "cronología", "estado", "próximo", "actualización"]
+}

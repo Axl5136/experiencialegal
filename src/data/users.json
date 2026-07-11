@@ -1,0 +1,81 @@
+{
+  "users": [
+    {
+      "id": "TOUR-001",
+      "email": "turista@demo.com",
+      "password": "demo123",
+      "role": "tourist",
+      "nombre": "Michael Johnson",
+      "pais_origen": "USA - California",
+      "idioma": "en",
+      "dias_en_cdmx": 5,
+      "intereses": ["Tránsito", "Seguridad"],
+      "creado": "2024-07-11"
+    },
+    {
+      "id": "HOT-001",
+      "email": "hotelero@demo.com",
+      "password": "demo123",
+      "role": "hotelier",
+      "nombre": "Carlos Reyes Martínez",
+      "establecimiento": {
+        "nombre": "Restaurante El Chilango",
+        "tipo": "Restaurante",
+        "direccion": "Paseo de la Reforma 505, Cuauhtémoc, CDMX",
+        "rfc": "RFC-123456789",
+        "telefono": "+52 55 1234-5678"
+      },
+      "idioma": "es",
+      "permisos_vigentes": [
+        { "nombre": "Funcionamiento", "estado": "Vigente", "vencimiento": "2025-07-11" },
+        { "nombre": "Salubridad", "estado": "Vigente", "vencimiento": "2024-12-31" },
+        { "nombre": "Protección Civil", "estado": "Vigente", "vencimiento": "2025-03-15" }
+      ],
+      "creado": "2024-07-11"
+    },
+    {
+      "id": "CLI-001",
+      "email": "juan@demo.com",
+      "password": "demo123",
+      "role": "private_client",
+      "nombre": "Juan Pérez García",
+      "idioma": "es",
+      "expediente": {
+        "id": "EXP-2024-001",
+        "tipo_caso": "Laboral",
+        "estado": "En investigación",
+        "fecha_inicio": "2024-01-15",
+        "proxima_audiencia": "2024-08-20T10:00:00Z",
+        "lugar_audiencia": "Juzgado Laboral Primero, CDMX",
+        "abogado_asignado": "Lic. María López",
+        "abogado_email": "maria@experiencialegal.com",
+        "abogado_telefono": "+52 55 5555-5555",
+        "descripcion": "Demanda por despido injustificado",
+        "documentos": [
+          { "id": "DOC-001", "nombre": "Demanda.pdf", "fecha_subida": "2024-01-15", "tipo": "Demanda", "url_simulada": "/docs/demanda.pdf" },
+          { "id": "DOC-002", "nombre": "Contrato_Laboral.pdf", "fecha_subida": "2023-06-01", "tipo": "Evidencia", "url_simulada": "/docs/contrato.pdf" },
+          { "id": "DOC-003", "nombre": "Comunicaciones_Email.pdf", "fecha_subida": "2024-02-10", "tipo": "Evidencia", "url_simulada": "/docs/emails.pdf" }
+        ],
+        "cronologia": [
+          { "id": "CRONO-001", "fecha": "2024-01-15", "tipo": "Evento", "titulo": "Presentación de demanda", "descripcion": "Presentamos la demanda ante el juzgado", "visible_cliente": true },
+          { "id": "CRONO-002", "fecha": "2024-02-10", "tipo": "Resolución", "titulo": "Juzgado solicita documentación", "descripcion": "Se solicitan pruebas adicionales", "visible_cliente": true },
+          { "id": "CRONO-003", "fecha": "2024-07-01", "tipo": "Evento", "titulo": "Revisión de pruebas", "descripcion": "Nuestro equipo revisa documentación", "visible_cliente": false },
+          { "id": "CRONO-004", "fecha": "2024-08-20", "tipo": "Audiencia", "titulo": "Próxima audiencia", "descripcion": "Pendiente", "visible_cliente": true }
+        ]
+      },
+      "creado": "2024-03-20"
+    },
+    {
+      "id": "ABG-001",
+      "email": "maria@experiencialegal.com",
+      "password": "demo123",
+      "role": "lawyer",
+      "nombre": "Lic. María López Sánchez",
+      "especialidad": "Derecho Laboral",
+      "telefono": "+52 55 5555-5555",
+      "clientes_asignados": ["CLI-001", "CLI-002"],
+      "expedientes": ["EXP-2024-001", "EXP-2024-002"],
+      "creado": "2023-01-01"
+    }
+  ]
+}

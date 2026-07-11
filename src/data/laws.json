@@ -1,0 +1,115 @@
+{
+  "leyes": [
+    {
+      "id": "RT-CDMX",
+      "nombre": "Reglamento de Tránsito CDMX",
+      "nombre_en": "Mexico City Traffic Regulations",
+      "descripcion": "Regulaciones sobre circulación vehicular",
+      "aplicable_a": ["tourist", "hotelier"],
+      "temas": [
+        {
+          "keyword": ["estacionar", "doble fila", "parking"],
+          "titulo": "Estacionamiento",
+          "contenido_es": "Según el Reglamento de Tránsito CDMX, está PROHIBIDO estacionar en doble fila en cualquier horario, EXCEPTO en zonas de carga/descarga entre 06:00-09:00 y 18:00-20:00. Multa: $1,200-$2,500 MXN + remolque del vehículo.",
+          "contenido_en": "According to CDMX Traffic Regulations, parking in double row is PROHIBITED at any time, EXCEPT in loading/unloading zones between 06:00-09:00 and 18:00-20:00. Fine: $1,200-$2,500 MXN + towing."
+        },
+        {
+          "keyword": ["multa", "velocidad", "exceso"],
+          "titulo": "Límites de Velocidad y Multas",
+          "contenido_es": "Límites en CDMX: Zona escolar 40 km/h, Zona residencial 50 km/h, Avenidas 60 km/h, Periférico 80 km/h. Multa por exceso: $1,500-$3,000 MXN según exceso.",
+          "contenido_en": "Speed limits in CDMX: School zone 40 km/h, Residential 50 km/h, Avenues 60 km/h, Ring Road 80 km/h. Fine for speeding: $1,500-$3,000 MXN."
+        },
+        {
+          "keyword": ["documentos", "placas", "verificación"],
+          "titulo": "Documentos y Placas",
+          "contenido_es": "Debes llevar: Licencia, Comprobante propiedad, Verificación vigente. Sin verificación vigente: Multa $2,500+ MXN. Placas ilegibles: Multa $1,000 MXN.",
+          "contenido_en": "You must carry: Driver's license, Ownership proof, Valid inspection. Without inspection: Fine $2,500+ MXN. Illegible plates: Fine $1,000 MXN."
+        }
+      ]
+    },
+    {
+      "id": "LAC-2020",
+      "nombre": "Ley de Anticorrupción CDMX",
+      "nombre_en": "CDMX Anti-Corruption Law",
+      "descripcion": "Derechos y obligaciones en trámites con autoridades",
+      "aplicable_a": ["tourist", "hotelier"],
+      "temas": [
+        {
+          "keyword": ["coima", "soborno", "dinero", "autoridad"],
+          "titulo": "Derechos en Trámites",
+          "contenido_es": "NO es obligatorio dar dinero a autoridades. Si te piden 'cooperación' o 'propina', PUEDES NEGARTE. Es tu derecho. Reporta en: Contraloría CDMX (55-5242-4500) o app 'Denuncia Vial'.",
+          "contenido_en": "It is NOT mandatory to give money to authorities. If they ask for 'cooperation' or 'tip', you CAN refuse. It's your right. Report to: CDMX Controller (55-5242-4500) or 'Denuncia Vial' app."
+        },
+        {
+          "keyword": ["corrupción", "reporte", "denuncia", "transparencia"],
+          "titulo": "Cómo Reportar Abuso",
+          "contenido_es": "Si experimentas presión de autoridades: 1) Anota nombre, placa, hora. 2) Toma foto/video si es seguro. 3) Llamar al 911 o Contraloría. 4) No entres en confrontación.",
+          "contenido_en": "If pressured by authorities: 1) Note name, badge, time. 2) Take photo/video if safe. 3) Call 911 or Controller. 4) Don't confront."
+        }
+      ]
+    },
+    {
+      "id": "NOM-251-SSA",
+      "nombre": "Norma de Salubridad (NOM-251-SSA)",
+      "nombre_en": "Health Sanitation Standard",
+      "descripcion": "Regulaciones de manipulación de alimentos",
+      "aplicable_a": ["hotelier"],
+      "temas": [
+        {
+          "keyword": ["manipulación", "alimentos", "comida", "licencia", "sanitaria"],
+          "titulo": "Licencia de Salubridad",
+          "contenido_es": "Todo establecimiento que manipule alimentos necesita LICENCIA SANITARIA de la Secretaría de Salud. Requisitos: Local limpio, Personal con capacitación, Refrigeración adecuada, Documentación de proveedores. Costo: $500-$1,000 MXN. Tiempo: 7-15 días.",
+          "contenido_en": "Any food handling establishment needs SANITARY LICENSE from Health Secretary. Requirements: Clean premises, Trained staff, Proper refrigeration, Supplier documentation. Cost: $500-$1,000 MXN. Time: 7-15 days."
+        },
+        {
+          "keyword": ["inspector", "inspección", "COFEPRIS", "violación"],
+          "titulo": "Inspecciones de Salubridad",
+          "contenido_es": "COFEPRIS puede inspeccionar sin aviso previo. Verifican: Manipulación, Temperaturas, Fechas de caducidad, Higiene. Violaciones: Clausura temporal ($5,000+) o permanente si reincidencia.",
+          "contenido_en": "COFEPRIS can inspect without notice. They check: Handling, Temperatures, Expiration dates, Hygiene. Violations: Temporary ($5,000+) or permanent closure if repeat."
+        }
+      ]
+    },
+    {
+      "id": "LPCC-2023",
+      "nombre": "Ley de Protección Civil CDMX",
+      "nombre_en": "CDMX Civil Protection Law",
+      "descripcion": "Obligaciones de seguridad en establecimientos",
+      "aplicable_a": ["hotelier"],
+      "temas": [
+        {
+          "keyword": ["evacuación", "salida", "emergencia", "protocolo"],
+          "titulo": "Planos de Evacuación",
+          "contenido_es": "Toda empresa debe tener: 1) Plano de evacuación visible. 2) Rutas de escape señalizadas. 3) Puntos de reunión marcados. 4) Simulacros trimestrales. Incumplimiento: Multa $2,000-$10,000 MXN.",
+          "contenido_en": "Every business must have: 1) Visible evacuation plan. 2) Marked escape routes. 3) Assembly points. 4) Quarterly drills. Non-compliance: Fine $2,000-$10,000 MXN."
+        },
+        {
+          "keyword": ["extintores", "señalización", "equipamiento"],
+          "titulo": "Equipamiento de Seguridad",
+          "contenido_es": "Requisitos: 1) Extintores (1 cada 15m²). 2) Señalización de salidas (500 lux). 3) Iluminación de emergencia. 4) Sistema de detección de humo (opcional pero recomendado). Revisión anual obligatoria.",
+          "contenido_en": "Requirements: 1) Fire extinguishers (1 per 15m²). 2) Exit signage (500 lux). 3) Emergency lighting. 4) Smoke detection (optional but recommended). Annual review mandatory."
+        }
+      ]
+    },
+    {
+      "id": "CPC-2023",
+      "nombre": "Código de Procedimientos Civiles CDMX",
+      "nombre_en": "CDMX Civil Procedure Code",
+      "descripcion": "Arrendamientos, contratos, y resolución de conflictos",
+      "aplicable_a": ["hotelier"],
+      "temas": [
+        {
+          "keyword": ["inquilino", "arrendamiento", "contrato", "renta"],
+          "titulo": "Derechos del Arrendatario",
+          "contenido_es": "Derechos: 1) Recibir recibo de pago. 2) Casa en buen estado. 3) No entrada sin aviso. 4) Privacidad. El inquilino NO puede ser desalojado sin proceso legal (mínimo 60 días aviso).",
+          "contenido_en": "Rights: 1) Receipt for payment. 2) Property in good condition. 3) No entry without notice. 4) Privacy. Tenant cannot be evicted without legal process (minimum 60 days notice)."
+        },
+        {
+          "keyword": ["desalojo", "caducidad", "terminación"],
+          "titulo": "Proceso de Desalojo",
+          "contenido_es": "Para desalojar: 1) Notificación legal (60+ días). 2) Demanda ante juzgado. 3) Audiencia (mínimo 2 comparecencias). 4) Sentencia. 5) Ejecución de sentencia. Tiempo total: 6-12 meses. PROHIBIDO cortes de agua/luz o acoso.",
+          "contenido_en": "To evict: 1) Legal notice (60+ days). 2) Lawsuit at court. 3) Hearing (min 2 appearances). 4) Judgment. 5) Enforcement. Total time: 6-12 months. PROHIBITED: Water/electricity cuts or harassment."
+        }
+      ]
+    }
+  ]
+}
