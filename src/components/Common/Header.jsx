@@ -7,7 +7,7 @@ function Header() {
   const { language, setLanguage, t } = useLanguage()
 
   return (
-    <header className="flex items-center justify-between border-b border-border bg-white px-6 py-4">
+    <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-white/90 px-6 py-4 shadow-[var(--shadow-elevation-sm)] backdrop-blur-sm">
       <span className="font-heading text-lg font-semibold text-primary">{t('common.appName')}</span>
       <div className="flex items-center gap-4 text-sm">
         <span className="hidden text-foreground/70 sm:inline">

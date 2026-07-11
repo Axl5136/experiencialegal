@@ -1,35 +1,61 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #1e3a8a;
+  /* Primary — LegalTech blue scale */
+  --color-primary-dark: #0f3460;
+  --color-primary: #16568e;
+  --color-primary-light: #6cb4ff;
   --color-primary-foreground: #ffffff;
-  --color-secondary: #1e40af;
-  --color-accent: #b45309;
+  --color-secondary: #0f3460;
+
+  /* Accent = main CTA (vivid blue) */
+  --color-accent: #1e90ff;
   --color-accent-foreground: #ffffff;
-  --color-background: #f8fafc;
-  --color-foreground: #0f172a;
-  --color-muted: #e9eef5;
-  --color-border: #cbd5e1;
+
+  /* Semantic status colors */
+  --color-success: #10b981;
+  --color-success-light: #34d399;
+  --color-success-foreground: #ffffff;
+  --color-warning: #d97706;
+  --color-warning-light: #fbbf24;
+  --color-warning-foreground: #ffffff;
   --color-destructive: #dc2626;
-  --color-ring: #1e3a8a;
+  --color-destructive-light: #f87171;
+  --color-destructive-foreground: #ffffff;
 
-  --font-heading: "EB Garamond", "Georgia", serif;
-  --font-sans: "Lato", "Helvetica Neue", Arial, sans-serif;
+  /* Neutrals */
+  --color-background: #f9fafb;
+  --color-foreground: #111827;
+  --color-muted: #f3f4f6;
+  --color-muted-foreground: #4b5563;
+  --color-border: #e5e7eb;
+  --color-ring: #1e90ff;
 
-  --shadow-elevation-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
-  --shadow-elevation-md: 0 4px 6px rgba(15, 23, 42, 0.1);
-  --shadow-elevation-lg: 0 10px 15px rgba(15, 23, 42, 0.1);
-  --shadow-elevation-xl: 0 20px 25px rgba(15, 23, 42, 0.15);
+  --font-heading: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  --shadow-elevation-sm: 0 1px 2px rgba(17, 24, 39, 0.06);
+  --shadow-elevation-md: 0 4px 6px rgba(17, 24, 39, 0.1);
+  --shadow-elevation-lg: 0 10px 15px rgba(17, 24, 39, 0.1);
+  --shadow-elevation-xl: 0 20px 25px rgba(17, 24, 39, 0.15);
 }
 
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
+  letter-spacing: 0.15px;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-accent) 100%);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -67,6 +93,11 @@ h1, h2, h3, h4 {
   30% { transform: translateY(-3px); opacity: 1; }
 }
 
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
 .animate-fade-in-up {
   animation: fade-in-up 0.4s ease-out both;
 }
@@ -85,4 +116,8 @@ h1, h2, h3, h4 {
 
 .typing-dot {
   animation: typing-dot 1.2s ease-in-out infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
 }

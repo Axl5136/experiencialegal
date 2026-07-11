@@ -7,6 +7,12 @@ const PROGRESS_BY_STATE = {
   Sentencia: 100,
 }
 
+const STATUS_DOT = {
+  'En investigación': 'bg-warning',
+  'En juicio': 'bg-primary-light',
+  Sentencia: 'bg-success',
+}
+
 function SidebarPrivateClient({ profile }) {
   const { t, language } = useLanguage()
   const expediente = profile?.expediente
@@ -19,8 +25,9 @@ function SidebarPrivateClient({ profile }) {
     <div className="flex h-full flex-col gap-4 overflow-y-auto rounded-xl border border-border bg-white p-5 shadow-[var(--shadow-elevation-md)]">
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-accent">{t('login.roles.private_client')}</p>
-        <h2 className="mt-1 font-heading text-lg font-semibold text-foreground">{expediente?.id}</h2>
-        <p className="mt-1 text-sm text-foreground/60">
+        <h2 className="mt-1 font-mono text-lg font-semibold text-foreground">{expediente?.id}</h2>
+        <p className="mt-1 flex items-center gap-1.5 text-sm text-foreground/60">
+          <span className={`h-2 w-2 animate-pulse-soft rounded-full ${STATUS_DOT[expediente?.estado] ?? 'bg-muted-foreground'}`} />
           {expediente?.tipo_caso} · {expediente?.estado}
         </p>
       </div>

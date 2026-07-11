@@ -82,7 +82,7 @@ function ExpedienteDetail() {
         </Link>
 
         <div className="mt-4 flex items-center justify-between">
-          <h1 className="font-heading text-2xl font-semibold text-foreground">{expediente.id}</h1>
+          <h1 className="font-mono text-2xl font-semibold text-foreground">{expediente.id}</h1>
           <div className="flex gap-2">
             <button
               type="button"
@@ -167,7 +167,7 @@ function ExpedienteDetail() {
           <div className="animate-scale-in w-full max-w-md rounded-2xl bg-white p-8 shadow-[var(--shadow-elevation-xl)]">
             <h3 className="font-heading text-lg font-semibold text-foreground">Link de acceso para el cliente</h3>
             <div className="mt-3 flex items-center gap-2 rounded-lg bg-muted px-3 py-2">
-              <span className="flex-1 truncate text-sm text-foreground/70">{clientLink}</span>
+              <span className="flex-1 truncate font-mono text-sm text-foreground/70">{clientLink}</span>
               <button
                 type="button"
                 onClick={copyLink}

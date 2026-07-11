@@ -15,9 +15,9 @@ function complianceStatus(permisos = []) {
 }
 
 const STATUS_STYLES = {
-  green: { dot: 'bg-emerald-500', text: 'text-emerald-700' },
-  yellow: { dot: 'bg-amber-500', text: 'text-amber-700' },
-  red: { dot: 'bg-red-500', text: 'text-red-700' },
+  green: { dot: 'bg-success', text: 'text-success' },
+  yellow: { dot: 'bg-warning', text: 'text-warning' },
+  red: { dot: 'bg-destructive', text: 'text-destructive' },
 }
 
 function SidebarHotelier({ profile }) {
@@ -37,7 +37,7 @@ function SidebarHotelier({ profile }) {
       </div>
 
       <div className="flex items-center gap-2 rounded-lg bg-muted px-4 py-3">
-        <span className={`h-2.5 w-2.5 rounded-full ${status.dot}`} />
+        <span className={`h-2.5 w-2.5 animate-pulse-soft rounded-full ${status.dot}`} />
         <span className={`text-sm font-medium ${status.text}`}>{t(`sidebarHotelier.compliance.${statusKey}`)}</span>
       </div>
 

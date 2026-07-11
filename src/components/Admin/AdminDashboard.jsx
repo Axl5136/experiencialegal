@@ -81,7 +81,7 @@ function AdminDashboard() {
                   key={exp.id}
                   className="border-b border-border transition-colors duration-150 last:border-0 hover:bg-muted/50"
                 >
-                  <td className="px-4 py-3 font-medium text-foreground">{exp.id}</td>
+                  <td className="px-4 py-3 font-mono text-foreground">{exp.id}</td>
                   <td className="px-4 py-3 text-foreground/70">{exp.cliente}</td>
                   <td className="px-4 py-3 text-foreground/70">{exp.tipo_caso}</td>
                   <td className="px-4 py-3 text-foreground/70">{exp.estado}</td>
