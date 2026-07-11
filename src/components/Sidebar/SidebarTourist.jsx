@@ -48,7 +48,7 @@ function SidebarTourist({ profile }) {
 
       <button
         type="button"
-        className="mt-auto flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity duration-200 hover:opacity-90"
+        className="mt-auto flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
       >
         <PhoneIcon className="h-4 w-4" />
         {t('sidebarTourist.contactLawyer')}

@@ -43,7 +43,7 @@ function AdminLogin() {
           <p className="text-sm text-foreground/50">Panel de abogados</p>
         </div>
 
-        <div className="rounded-xl border border-border bg-white p-6 shadow-[var(--shadow-elevation-md)]">
+        <div className={`animate-scale-in rounded-xl border border-border bg-white p-6 shadow-[var(--shadow-elevation-md)] ${error ? 'animate-shake' : ''}`}>
           <h1 className="font-heading text-xl font-semibold text-foreground">Acceso Admin</h1>
 
           <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-3">
@@ -64,7 +64,7 @@ function AdminLogin() {
             {error && <p className="text-sm text-destructive">{error}</p>}
             <button
               type="submit"
-              className="mt-1 cursor-pointer rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-opacity duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="mt-1 cursor-pointer rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               Iniciar sesión
             </button>

@@ -28,10 +28,10 @@ function Dashboard() {
         <Header />
 
         <main className="flex flex-1 flex-col gap-4 overflow-hidden p-4 md:flex-row">
-          <section className="min-h-[50vh] flex-[2] md:min-h-0">
+          <section className="animate-fade-in-up min-h-[50vh] flex-[2] md:min-h-0">
             <ChatBox />
           </section>
-          <aside className="flex-1 md:max-w-sm">
+          <aside className="animate-fade-in-up flex-1 md:max-w-sm" style={{ animationDelay: '100ms' }}>
             {SidebarComponent ? (
               <SidebarComponent profile={profile} />
             ) : (

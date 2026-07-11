@@ -51,15 +51,26 @@ function Landing() {
 
       <main className="flex-1">
         <section className="mx-auto flex max-w-4xl flex-col items-center px-6 py-20 text-center">
-          <span className="rounded-full bg-muted px-4 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
+          <span className="animate-fade-in-up rounded-full bg-muted px-4 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
             {t('landing.badge')}
           </span>
-          <h1 className="mt-6 font-heading text-4xl font-semibold leading-tight text-foreground sm:text-5xl">
+          <h1
+            className="animate-fade-in-up mt-6 font-heading text-4xl font-semibold leading-tight text-foreground sm:text-5xl"
+            style={{ animationDelay: '80ms' }}
+          >
             {t('landing.title')}
           </h1>
-          <p className="mt-4 max-w-xl text-lg text-foreground/70">{t('landing.subtitle')}</p>
+          <p
+            className="animate-fade-in-up mt-4 max-w-xl text-lg text-foreground/70"
+            style={{ animationDelay: '160ms' }}
+          >
+            {t('landing.subtitle')}
+          </p>
 
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+          <div
+            className="animate-fade-in-up mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-4"
+            style={{ animationDelay: '240ms' }}
+          >
             {TRUST_BADGES.map(({ Icon, label }) => (
               <div key={label} className="flex items-center gap-2 text-sm text-foreground/70">
                 <Icon className="h-5 w-5 text-accent" aria-hidden="true" />
@@ -71,12 +82,13 @@ function Landing() {
 
         <section className="mx-auto max-w-6xl px-6 pb-20">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {ROLES.map(({ role, Icon, key }) => (
+            {ROLES.map(({ role, Icon, key }, index) => (
               <div
                 key={role}
-                className="group flex flex-col items-start rounded-xl border border-border bg-white p-6 shadow-[var(--shadow-elevation-md)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-elevation-lg)]"
+                className="group animate-fade-in-up flex flex-col items-start rounded-xl border border-border bg-white p-6 shadow-[var(--shadow-elevation-md)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-elevation-lg)] active:scale-[0.99]"
+                style={{ animationDelay: `${320 + index * 100}ms` }}
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-muted">
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-muted transition-transform duration-200 group-hover:scale-110">
                   <Icon className="h-6 w-6 text-primary" aria-hidden="true" />
                 </div>
                 <h2 className="mt-4 font-heading text-lg font-semibold text-foreground">

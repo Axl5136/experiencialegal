@@ -96,7 +96,7 @@ function ExpedienteDetail() {
               <button
                 type="button"
                 onClick={saveEdits}
-                className="cursor-pointer rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-accent-foreground hover:opacity-90"
+                className="cursor-pointer rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-accent-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
               >
                 Guardar
               </button>
@@ -107,7 +107,7 @@ function ExpedienteDetail() {
                   setDraft(expediente)
                   setEditing(true)
                 }}
-                className="cursor-pointer rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+                className="cursor-pointer rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
               >
                 Editar
               </button>
@@ -153,7 +153,7 @@ function ExpedienteDetail() {
             <button
               type="button"
               onClick={addEvento}
-              className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+              className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
             >
               <PlusIcon className="h-4 w-4" />
               Agregar evento
@@ -163,15 +163,15 @@ function ExpedienteDetail() {
       </main>
 
       {showLink && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm px-6">
-          <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-[var(--shadow-elevation-xl)]">
+        <div className="animate-fade-in fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm px-6">
+          <div className="animate-scale-in w-full max-w-md rounded-2xl bg-white p-8 shadow-[var(--shadow-elevation-xl)]">
             <h3 className="font-heading text-lg font-semibold text-foreground">Link de acceso para el cliente</h3>
             <div className="mt-3 flex items-center gap-2 rounded-lg bg-muted px-3 py-2">
               <span className="flex-1 truncate text-sm text-foreground/70">{clientLink}</span>
               <button
                 type="button"
                 onClick={copyLink}
-                className="flex cursor-pointer items-center gap-1 rounded-md bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground hover:opacity-90"
+                className="flex cursor-pointer items-center gap-1 rounded-md bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-95"
               >
                 <ClipboardDocumentIcon className="h-3.5 w-3.5" />
                 {copied ? 'Copiado' : 'Copiar'}
@@ -180,7 +180,7 @@ function ExpedienteDetail() {
             <button
               type="button"
               onClick={() => setShowLink(false)}
-              className="mt-5 w-full cursor-pointer rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary"
+              className="mt-5 w-full cursor-pointer rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors duration-200 hover:border-primary active:scale-[0.99]"
             >
               Cerrar
             </button>

@@ -55,7 +55,7 @@ function SidebarHotelier({ profile }) {
 
       <button
         type="button"
-        className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity duration-200 hover:opacity-90"
+        className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
       >
         <CalendarDaysIcon className="h-4 w-4" />
         {t('sidebarHotelier.scheduleAdvice')}

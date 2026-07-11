@@ -65,7 +65,9 @@ function Login() {
           </select>
         </div>
 
-        <div className="rounded-xl border border-border bg-white p-6 shadow-[var(--shadow-elevation-md)]">
+        <div
+          className={`animate-scale-in rounded-xl border border-border bg-white p-6 shadow-[var(--shadow-elevation-md)] ${error ? 'animate-shake' : ''}`}
+        >
           <h1 className="font-heading text-xl font-semibold text-foreground">{t('login.title')}</h1>
           <p className="mt-1 text-sm text-foreground/60">
             {t('login.type')}: {t(`login.roles.${role}`) || role}
@@ -89,7 +91,7 @@ function Login() {
             {error && <p className="text-sm text-destructive">{error}</p>}
             <button
               type="submit"
-              className="mt-1 cursor-pointer rounded-lg bg-accent px-4 py-3 text-sm font-semibold text-accent-foreground transition-all duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="mt-1 cursor-pointer rounded-lg bg-accent px-4 py-3 text-sm font-semibold text-accent-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               {t('login.submit')}
             </button>

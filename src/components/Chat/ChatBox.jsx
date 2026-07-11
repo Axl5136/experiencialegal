@@ -14,7 +14,7 @@ function ChatBox() {
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-white shadow-[var(--shadow-elevation-md)]">
-      <MessageList messages={messages} isTyping={isTyping} typingLabel={t('dashboard.typing')} />
+      <MessageList messages={messages} isTyping={isTyping} />
       <InputField onSend={sendMessage} placeholder={t('dashboard.chatPlaceholder')} />
     </div>
   )

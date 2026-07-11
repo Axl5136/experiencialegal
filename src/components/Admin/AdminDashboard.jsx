@@ -31,10 +31,11 @@ function AdminDashboard() {
             { label: 'Expedientes Activos', value: expedientes.length },
             { label: 'Clientes', value: clientesUnicos },
             { label: 'Consultas esta semana', value: 12 },
-          ].map((kpi) => (
+          ].map((kpi, index) => (
             <div
               key={kpi.label}
-              className="min-w-[160px] flex-1 rounded-xl border border-border bg-white p-4 shadow-[var(--shadow-elevation-sm)]"
+              className="animate-fade-in-up min-w-[160px] flex-1 rounded-xl border border-border bg-white p-4 shadow-[var(--shadow-elevation-sm)] transition-shadow duration-200 hover:shadow-[var(--shadow-elevation-md)]"
+              style={{ animationDelay: `${index * 80}ms` }}
             >
               <p className="font-heading text-2xl font-semibold text-primary">{kpi.value}</p>
               <p className="text-sm text-foreground/60">{kpi.label}</p>
@@ -45,7 +46,7 @@ function AdminDashboard() {
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Link
             to="/admin/expediente/nuevo"
-            className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity duration-200 hover:opacity-90"
+            className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
           >
             <PlusIcon className="h-4 w-4" />
             Crear nuevo expediente
@@ -76,7 +77,10 @@ function AdminDashboard() {
             </thead>
             <tbody>
               {filtered.map((exp) => (
-                <tr key={exp.id} className="border-b border-border last:border-0">
+                <tr
+                  key={exp.id}
+                  className="border-b border-border transition-colors duration-150 last:border-0 hover:bg-muted/50"
+                >
                   <td className="px-4 py-3 font-medium text-foreground">{exp.id}</td>
                   <td className="px-4 py-3 text-foreground/70">{exp.cliente}</td>
                   <td className="px-4 py-3 text-foreground/70">{exp.tipo_caso}</td>
