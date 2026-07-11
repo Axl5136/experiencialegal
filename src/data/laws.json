@@ -56,7 +56,7 @@
       "aplicable_a": ["hotelier"],
       "temas": [
         {
-          "keyword": ["manipulación", "alimentos", "comida", "licencia", "sanitaria"],
+          "keyword": ["manipulación", "alimentos", "comida", "licencia", "sanitaria", "permiso", "permisos", "funcionamiento", "renovar", "requisitos", "restaurante"],
           "titulo": "Licencia de Salubridad",
           "contenido_es": "Todo establecimiento que manipule alimentos necesita LICENCIA SANITARIA de la Secretaría de Salud. Requisitos: Local limpio, Personal con capacitación, Refrigeración adecuada, Documentación de proveedores. Costo: $500-$1,000 MXN. Tiempo: 7-15 días.",
           "contenido_en": "Any food handling establishment needs SANITARY LICENSE from Health Secretary. Requirements: Clean premises, Trained staff, Proper refrigeration, Supplier documentation. Cost: $500-$1,000 MXN. Time: 7-15 days."

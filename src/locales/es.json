@@ -2,6 +2,79 @@
   "common": {
     "appName": "Experiencia Legal",
     "loading": "Cargando...",
-    "back": "Volver"
+    "back": "Volver",
+    "contact": "Contacto",
+    "logout": "Cerrar sesión",
+    "hello": "Hola",
+    "disclaimer": "Esto no constituye asesoría legal formal."
+  },
+  "landing": {
+    "badge": "Despacho de Abogados · CDMX",
+    "title": "Asesoría Legal 24/7",
+    "subtitle": "Reducimos la fricción legal con inteligencia artificial, respaldada por abogados reales.",
+    "trust": {
+      "certified": "Abogados certificados",
+      "available": "Disponible 24/7",
+      "confidential": "Confidencialidad garantizada"
+    },
+    "roles": {
+      "tourist": { "title": "Turista", "description": "Desconoces las leyes locales de CDMX y quieres viajar con tranquilidad." },
+      "hotelier": { "title": "Hotelero", "description": "Necesitas resolver la complejidad burocrática de tu establecimiento." },
+      "private_client": { "title": "Cliente", "description": "Tienes un caso abierto con nosotros y quieres seguir su avance." }
+    },
+    "access": "Acceder",
+    "footerLinks": "Sobre nosotros · Blog · Contacto"
+  },
+  "login": {
+    "title": "Inicia sesión",
+    "type": "Tipo",
+    "email": "Email",
+    "password": "Contraseña",
+    "submit": "Iniciar sesión",
+    "demoLink": "Usar credenciales de demo",
+    "requiredError": "Completa email y contraseña.",
+    "roles": {
+      "tourist": "Turista",
+      "hotelier": "Hotelero",
+      "private_client": "Cliente",
+      "lawyer": "Abogado"
+    }
+  },
+  "dashboard": {
+    "chatPlaceholder": "¿Cuál es tu pregunta legal?",
+    "typing": "Escribiendo…",
+    "welcome": "¡Hola! ¿Cómo puedo ayudarte hoy?"
+  },
+  "sidebarTourist": {
+    "quickGuide": "Guía Rápida Turista",
+    "guideItems": [
+      "No estaciones en doble fila",
+      "Lleva documentos de ID siempre",
+      "No des dinero a autoridades (es coima)",
+      "Respeta horarios de establecimientos",
+      "Verifica tu auto no esté marcado por pico y placa"
+    ],
+    "faq": "Preguntas Frecuentes",
+    "faqBody": "Pregúntale al chat sobre tránsito, multas, o tus derechos frente a autoridades.",
+    "contactLawyer": "Contactar abogado",
+    "available": "Disponible 24/7"
+  },
+  "sidebarHotelier": {
+    "compliance": {
+      "green": "Todos los permisos vigentes",
+      "yellow": "Algún permiso vence pronto",
+      "red": "Algún permiso vencido"
+    },
+    "permitsTitle": "Permisos vigentes",
+    "scheduleAdvice": "Agendar asesoría",
+    "downloadChecklist": "Descargar checklist de permisos"
+  },
+  "sidebarClient": {
+    "progress": "del proceso",
+    "nextHearing": "Próxima audiencia",
+    "updates": "Últimas actualizaciones",
+    "assignedLawyer": "Abogado asignado",
+    "contactLawyer": "Contactar abogado",
+    "downloadDocuments": "Descargar documentos"
   }
 }

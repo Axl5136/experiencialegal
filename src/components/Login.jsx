@@ -12,13 +12,6 @@ const DEMO_CREDENTIALS = {
   lawyer: { email: 'maria@experiencialegal.com', password: 'demo123' },
 }
 
-const ROLE_LABELS = {
-  tourist: 'Turista',
-  hotelier: 'Hotelero',
-  private_client: 'Cliente',
-  lawyer: 'Abogado',
-}
-
 const inputClasses =
   'rounded-lg border border-border px-4 py-3 text-sm text-foreground placeholder:text-foreground/40 transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20'
 
@@ -29,7 +22,7 @@ function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const { login } = useAuth()
-  const { language, setLanguage } = useLanguage()
+  const { language, setLanguage, t } = useLanguage()
   const navigate = useNavigate()
 
   const fillDemo = () => {
@@ -41,7 +34,7 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!email.trim() || !password.trim()) {
-      setError('Completa email y contraseña.')
+      setError(t('login.requiredError'))
       return
     }
 
@@ -61,9 +54,7 @@ function Login() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex items-center justify-between">
-          <span className="font-heading text-xl font-semibold text-primary">
-            Experiencia Legal
-          </span>
+          <span className="font-heading text-xl font-semibold text-primary">{t('common.appName')}</span>
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
@@ -75,20 +66,22 @@ function Login() {
         </div>
 
         <div className="rounded-xl border border-border bg-white p-6 shadow-[var(--shadow-elevation-md)]">
-          <h1 className="font-heading text-xl font-semibold text-foreground">Inicia sesión</h1>
-          <p className="mt-1 text-sm text-foreground/60">Tipo: {ROLE_LABELS[role] || role}</p>
+          <h1 className="font-heading text-xl font-semibold text-foreground">{t('login.title')}</h1>
+          <p className="mt-1 text-sm text-foreground/60">
+            {t('login.type')}: {t(`login.roles.${role}`) || role}
+          </p>
 
           <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-3">
             <input
               type="email"
-              placeholder="Email"
+              placeholder={t('login.email')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={inputClasses}
             />
             <input
               type="password"
-              placeholder="Contraseña"
+              placeholder={t('login.password')}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className={inputClasses}
@@ -98,7 +91,7 @@ function Login() {
               type="submit"
               className="mt-1 cursor-pointer rounded-lg bg-accent px-4 py-3 text-sm font-semibold text-accent-foreground transition-all duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
-              Iniciar sesión
+              {t('login.submit')}
             </button>
           </form>
 
@@ -107,7 +100,7 @@ function Login() {
             onClick={fillDemo}
             className="mt-3 cursor-pointer text-xs font-medium text-foreground/50 underline decoration-dotted underline-offset-2 transition-colors duration-200 hover:text-primary"
           >
-            Usar credenciales de demo
+            {t('login.demoLink')}
           </button>
         </div>
 
@@ -116,7 +109,7 @@ function Login() {
           className="mt-4 flex cursor-pointer items-center justify-center gap-1.5 text-sm font-medium text-foreground/60 transition-colors duration-200 hover:text-primary"
         >
           <ArrowLeftIcon className="h-4 w-4" />
-          Volver
+          {t('common.back')}
         </Link>
       </div>
     </div>

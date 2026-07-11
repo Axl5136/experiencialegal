@@ -2,6 +2,79 @@
   "common": {
     "appName": "Experiencia Legal",
     "loading": "Loading...",
-    "back": "Back"
+    "back": "Back",
+    "contact": "Contact",
+    "logout": "Logout",
+    "hello": "Hello",
+    "disclaimer": "This does not constitute formal legal advice."
+  },
+  "landing": {
+    "badge": "Law Firm · Mexico City",
+    "title": "Legal Advice 24/7",
+    "subtitle": "We reduce legal friction with artificial intelligence, backed by real lawyers.",
+    "trust": {
+      "certified": "Certified attorneys",
+      "available": "Available 24/7",
+      "confidential": "Confidentiality guaranteed"
+    },
+    "roles": {
+      "tourist": { "title": "Tourist", "description": "You don't know Mexico City's local laws and want to travel with peace of mind." },
+      "hotelier": { "title": "Hotelier", "description": "You need to navigate the bureaucratic complexity of your business." },
+      "private_client": { "title": "Client", "description": "You have an open case with us and want to track its progress." }
+    },
+    "access": "Access",
+    "footerLinks": "About us · Blog · Contact"
+  },
+  "login": {
+    "title": "Sign in",
+    "type": "Type",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "demoLink": "Use demo credentials",
+    "requiredError": "Fill in email and password.",
+    "roles": {
+      "tourist": "Tourist",
+      "hotelier": "Hotelier",
+      "private_client": "Client",
+      "lawyer": "Lawyer"
+    }
+  },
+  "dashboard": {
+    "chatPlaceholder": "What is your legal question?",
+    "typing": "Typing…",
+    "welcome": "Hi! How can I help you today?"
+  },
+  "sidebarTourist": {
+    "quickGuide": "Quick Tourist Guide",
+    "guideItems": [
+      "Don't park in double rows",
+      "Always carry ID documents",
+      "Don't give money to authorities (it's a bribe)",
+      "Respect business hours",
+      "Check your car isn't flagged by pico y placa restrictions"
+    ],
+    "faq": "Frequently Asked Questions",
+    "faqBody": "Ask the chat about traffic, fines, or your rights with authorities.",
+    "contactLawyer": "Contact a lawyer",
+    "available": "Available 24/7"
+  },
+  "sidebarHotelier": {
+    "compliance": {
+      "green": "All permits current",
+      "yellow": "A permit is expiring soon",
+      "red": "A permit has expired"
+    },
+    "permitsTitle": "Current permits",
+    "scheduleAdvice": "Schedule advisory",
+    "downloadChecklist": "Download permit checklist"
+  },
+  "sidebarClient": {
+    "progress": "of process",
+    "nextHearing": "Next hearing",
+    "updates": "Latest updates",
+    "assignedLawyer": "Assigned lawyer",
+    "contactLawyer": "Contact lawyer",
+    "downloadDocuments": "Download documents"
   }
 }
