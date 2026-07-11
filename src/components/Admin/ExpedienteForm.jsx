@@ -65,7 +65,7 @@ function ExpedienteForm() {
               className={inputClasses}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium text-foreground/70">Tipo de caso</label>
               <select value={form.tipo_caso} onChange={update('tipo_caso')} className={inputClasses}>
@@ -87,7 +87,7 @@ function ExpedienteForm() {
               </select>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium text-foreground/70">Fecha inicio</label>
               <input type="date" value={form.fecha_inicio} onChange={update('fecha_inicio')} className={inputClasses} />
