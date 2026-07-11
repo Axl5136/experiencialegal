@@ -20,7 +20,8 @@
     "roles": {
       "tourist": { "title": "Tourist", "description": "You don't know Mexico City's local laws and want to travel with peace of mind." },
       "hotelier": { "title": "Hotelier", "description": "You need to navigate the bureaucratic complexity of your business." },
-      "private_client": { "title": "Client", "description": "You have an open case with us and want to track its progress." }
+      "private_client": { "title": "Client", "description": "You have an open case with us and want to track its progress." },
+      "lawyer": { "title": "Lawyer", "description": "Are you part of the firm? Sign in to the admin panel." }
     },
     "access": "Access",
     "footerLinks": "About us · Blog · Contact"

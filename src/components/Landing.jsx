@@ -3,6 +3,7 @@ import {
   UserIcon,
   BuildingOffice2Icon,
   ScaleIcon,
+  BriefcaseIcon,
   ShieldCheckIcon,
   ClockIcon,
   AcademicCapIcon,
@@ -11,9 +12,10 @@ import {
 import { useLanguage } from '../hooks/useLanguage'
 
 const ROLES = [
-  { role: 'tourist', Icon: UserIcon, key: 'tourist' },
-  { role: 'hotelier', Icon: BuildingOffice2Icon, key: 'hotelier' },
-  { role: 'private_client', Icon: ScaleIcon, key: 'private_client' },
+  { role: 'tourist', Icon: UserIcon, key: 'tourist', to: '/login?role=tourist' },
+  { role: 'hotelier', Icon: BuildingOffice2Icon, key: 'hotelier', to: '/login?role=hotelier' },
+  { role: 'private_client', Icon: ScaleIcon, key: 'private_client', to: '/login?role=private_client' },
+  { role: 'lawyer', Icon: BriefcaseIcon, key: 'lawyer', to: '/admin', staff: true },
 ]
 
 function Landing() {
@@ -83,13 +85,20 @@ function Landing() {
 
       <main className="flex-1">
         <section className="mx-auto max-w-6xl px-6 -mt-16 pb-20">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {ROLES.map(({ role, Icon, key }, index) => (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {ROLES.map(({ role, Icon, key, to, staff }, index) => (
               <div
                 key={role}
-                className="group animate-fade-in-up flex flex-col items-start rounded-xl border border-border bg-white p-6 shadow-[var(--shadow-elevation-lg)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-elevation-xl)] active:scale-[0.99]"
+                className={`group animate-fade-in-up relative flex flex-col items-start rounded-xl border bg-white p-6 shadow-[var(--shadow-elevation-lg)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-elevation-xl)] active:scale-[0.99] ${
+                  staff ? 'border-primary/30' : 'border-border'
+                }`}
                 style={{ animationDelay: `${320 + index * 100}ms` }}
               >
+                {staff && (
+                  <span className="absolute right-4 top-4 rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
+                    Staff
+                  </span>
+                )}
                 <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-muted transition-transform duration-200 group-hover:scale-110">
                   <Icon className="h-6 w-6 text-primary" aria-hidden="true" />
                 </div>
@@ -98,7 +107,7 @@ function Landing() {
                 </h2>
                 <p className="mt-2 text-sm text-foreground/60">{t(`landing.roles.${key}.description`)}</p>
                 <Link
-                  to={`/login?role=${role}`}
+                  to={to}
                   className="mt-6 inline-flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-accent transition-colors duration-200 hover:text-accent/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded"
                 >
                   {t('landing.access')}

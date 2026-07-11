@@ -20,7 +20,8 @@
     "roles": {
       "tourist": { "title": "Turista", "description": "Desconoces las leyes locales de CDMX y quieres viajar con tranquilidad." },
       "hotelier": { "title": "Hotelero", "description": "Necesitas resolver la complejidad burocrática de tu establecimiento." },
-      "private_client": { "title": "Cliente", "description": "Tienes un caso abierto con nosotros y quieres seguir su avance." }
+      "private_client": { "title": "Cliente", "description": "Tienes un caso abierto con nosotros y quieres seguir su avance." },
+      "lawyer": { "title": "Abogado", "description": "¿Eres parte del despacho? Ingresa al panel de administración." }
     },
     "access": "Acceder",
     "footerLinks": "Sobre nosotros · Blog · Contacto"
