@@ -17,7 +17,7 @@ function ClientePrivado() {
     return <Placeholder title="Link inválido o expediente no encontrado" />
   }
 
-  const profile = { role: 'private_client', nombre: expediente.cliente, expediente }
+  const profile = { id: expediente.id, role: 'private_client', nombre: expediente.cliente, expediente }
 
   return (
     <LegalAgentProvider profile={profile} language={language}>
@@ -44,7 +44,7 @@ function ClientePrivado() {
 
         <main className="flex flex-1 flex-col gap-4 overflow-hidden p-4 md:flex-row">
           <section className="animate-fade-in-up min-h-[50vh] flex-[2] md:min-h-0">
-            <ChatBox />
+            <ChatBox role="private_client" userInitial={expediente.cliente.charAt(0).toUpperCase()} />
           </section>
           <aside className="animate-fade-in-up flex-1 md:max-w-sm" style={{ animationDelay: '100ms' }}>
             <SidebarPrivateClient profile={profile} />

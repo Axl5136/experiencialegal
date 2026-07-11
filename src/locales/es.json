@@ -33,6 +33,10 @@
     "submit": "Iniciar sesión",
     "demoLink": "Usar credenciales de demo",
     "requiredError": "Completa email y contraseña.",
+    "emailInvalid": "Email no válido",
+    "passwordMin": "Mínimo 6 caracteres",
+    "invalidCredentials": "Credenciales inválidas",
+    "verifying": "Verificando...",
     "roles": {
       "tourist": "Turista",
       "hotelier": "Hotelero",

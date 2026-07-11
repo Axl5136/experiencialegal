@@ -1,10 +1,14 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { LegalAgentContext } from './legal-agent-context'
 import { handleUserMessage } from '../utils/legalEngine'
 
-function readStoredConversation() {
+function storageKey(userId) {
+  return `conversation_${userId ?? 'anonymous'}`
+}
+
+function readStoredConversation(userId) {
   try {
-    const raw = localStorage.getItem('conversation')
+    const raw = localStorage.getItem(storageKey(userId))
     return raw ? JSON.parse(raw) : []
   } catch {
     return []
@@ -12,12 +16,14 @@ function readStoredConversation() {
 }
 
 export function LegalAgentProvider({ profile, language, children }) {
-  const [conversation, setConversation] = useState(readStoredConversation)
+  const userId = profile?.id
+  const [conversation, setConversation] = useState(() => readStoredConversation(userId))
   const [isTyping, setIsTyping] = useState(false)
+  const hasPriorHistory = useMemo(() => readStoredConversation(userId).length > 0, [userId])
 
   useEffect(() => {
-    localStorage.setItem('conversation', JSON.stringify(conversation))
-  }, [conversation])
+    localStorage.setItem(storageKey(userId), JSON.stringify(conversation))
+  }, [conversation, userId])
 
   const sendMessage = useCallback(
     (text) => {
@@ -53,10 +59,10 @@ export function LegalAgentProvider({ profile, language, children }) {
 
   const clearConversation = useCallback(() => {
     setConversation([])
-    localStorage.removeItem('conversation')
-  }, [])
+    localStorage.removeItem(storageKey(userId))
+  }, [userId])
 
-  const value = { conversation, sendMessage, isTyping, clearConversation }
+  const value = { conversation, sendMessage, isTyping, clearConversation, hasPriorHistory }
 
   return <LegalAgentContext.Provider value={value}>{children}</LegalAgentContext.Provider>
 }

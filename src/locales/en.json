@@ -33,6 +33,10 @@
     "submit": "Sign in",
     "demoLink": "Use demo credentials",
     "requiredError": "Fill in email and password.",
+    "emailInvalid": "Invalid email",
+    "passwordMin": "Minimum 6 characters",
+    "invalidCredentials": "Invalid credentials",
+    "verifying": "Verifying...",
     "roles": {
       "tourist": "Tourist",
       "hotelier": "Hotelier",

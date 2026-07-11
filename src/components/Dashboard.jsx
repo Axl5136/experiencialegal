@@ -29,7 +29,10 @@ function Dashboard() {
 
         <main className="flex flex-1 flex-col gap-4 overflow-hidden p-4 md:flex-row">
           <section className="animate-fade-in-up min-h-[50vh] flex-[2] md:min-h-0">
-            <ChatBox />
+            <ChatBox
+              role={profile?.role}
+              userInitial={(profile?.nombre || profile?.role || '?').charAt(0).toUpperCase()}
+            />
           </section>
           <aside className="animate-fade-in-up flex-1 md:max-w-sm" style={{ animationDelay: '100ms' }}>
             {SidebarComponent ? (

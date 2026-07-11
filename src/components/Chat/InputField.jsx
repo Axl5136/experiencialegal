@@ -1,13 +1,9 @@
-import { useState } from 'react'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 
-function InputField({ onSend, placeholder }) {
-  const [value, setValue] = useState('')
-
+function InputField({ value, onChange, onSend, placeholder }) {
   const submit = () => {
     if (!value.trim()) return
     onSend(value)
-    setValue('')
   }
 
   const handleKeyDown = (e) => {
@@ -18,23 +14,23 @@ function InputField({ onSend, placeholder }) {
   }
 
   return (
-    <div className="flex items-center gap-2 border-t border-border bg-white p-3">
+    <div className="flex items-center gap-2 border-t border-border bg-white p-4">
       <input
         type="text"
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="flex-1 rounded-full border border-border px-4 py-2.5 text-sm text-foreground placeholder:text-foreground/40 transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+        className="min-h-11 flex-1 rounded-full border-2 border-border bg-muted px-4 py-2.5 text-base text-foreground placeholder:text-foreground/40 transition-colors duration-200 focus:border-accent focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent/20"
       />
       <button
         type="button"
         onClick={submit}
         aria-label="Enviar"
-        className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-accent text-accent-foreground transition-all duration-200 hover:scale-105 hover:opacity-90 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
         disabled={!value.trim()}
+        className="group flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-accent text-accent-foreground transition-all duration-200 hover:opacity-90 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
       >
-        <PaperAirplaneIcon className="h-4 w-4" />
+        <PaperAirplaneIcon className="h-4 w-4 transition-transform duration-150 group-hover:rotate-45" />
       </button>
     </div>
   )
