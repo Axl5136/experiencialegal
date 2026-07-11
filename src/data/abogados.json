@@ -1,0 +1,28 @@
+{
+  "abogados": [
+    {
+      "id": "ABG-001",
+      "nombre": "Lic. María López Sánchez",
+      "especialidad": "Derecho Laboral",
+      "telefono": "+52 55 5555-5555",
+      "email": "maria@experiencialegal.com",
+      "horario": "Lunes a Viernes, 9:00 - 18:00"
+    },
+    {
+      "id": "ABG-002",
+      "nombre": "Lic. Roberto Hernández Cruz",
+      "especialidad": "Derecho Civil y Mercantil",
+      "telefono": "+52 55 5555-5512",
+      "email": "roberto@experiencialegal.com",
+      "horario": "Lunes a Viernes, 10:00 - 19:00"
+    },
+    {
+      "id": "ABG-003",
+      "nombre": "Lic. Ana Torres Villalobos",
+      "especialidad": "Derecho Penal",
+      "telefono": "+52 55 5555-5533",
+      "email": "ana@experiencialegal.com",
+      "horario": "Lunes a Sábado, 9:00 - 17:00"
+    }
+  ]
+}

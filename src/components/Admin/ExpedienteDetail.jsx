@@ -3,15 +3,17 @@ import { useParams, Link } from 'react-router-dom'
 import { ArrowLeftIcon, LinkIcon, PlusIcon, ClipboardDocumentIcon } from '@heroicons/react/24/outline'
 import Header from '../Common/Header'
 import Footer from '../Common/Footer'
+import Modal from '../Common/Modal'
+import { useToast } from '../../hooks/useToast'
 import { getExpedienteById, updateExpediente, addCronologiaEvento } from '../../utils/storage'
 
 function ExpedienteDetail() {
   const { id } = useParams()
+  const { showToast } = useToast()
   const [expediente, setExpediente] = useState(() => getExpedienteById(id))
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(expediente ?? {})
   const [showLink, setShowLink] = useState(false)
-  const [copied, setCopied] = useState(false)
   const [newEvento, setNewEvento] = useState({ fecha: '', titulo: '' })
 
   if (!expediente) {
@@ -48,8 +50,7 @@ function ExpedienteDetail() {
 
   const copyLink = async () => {
     await navigator.clipboard.writeText(clientLink)
-    setCopied(true)
-    window.setTimeout(() => setCopied(false), 2000)
+    showToast('Link copiado al portapapeles', 'success')
   }
 
   const field = (label, key, type = 'text') => (
@@ -162,31 +163,32 @@ function ExpedienteDetail() {
         </div>
       </main>
 
-      {showLink && (
-        <div className="animate-fade-in fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm px-6">
-          <div className="animate-scale-in w-full max-w-md rounded-2xl bg-white p-8 shadow-[var(--shadow-elevation-xl)]">
-            <h3 className="font-heading text-lg font-semibold text-foreground">Link de acceso para el cliente</h3>
-            <div className="mt-3 flex items-center gap-2 rounded-lg bg-muted px-3 py-2">
-              <span className="flex-1 truncate font-mono text-sm text-foreground/70">{clientLink}</span>
-              <button
-                type="button"
-                onClick={copyLink}
-                className="flex cursor-pointer items-center gap-1 rounded-md bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-95"
-              >
-                <ClipboardDocumentIcon className="h-3.5 w-3.5" />
-                {copied ? 'Copiado' : 'Copiar'}
-              </button>
-            </div>
-            <button
-              type="button"
-              onClick={() => setShowLink(false)}
-              className="mt-5 w-full cursor-pointer rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors duration-200 hover:border-primary active:scale-[0.99]"
-            >
-              Cerrar
-            </button>
-          </div>
+      <Modal
+        isOpen={showLink}
+        onClose={() => setShowLink(false)}
+        title="Link de acceso para el cliente"
+        footer={
+          <button
+            type="button"
+            onClick={() => setShowLink(false)}
+            className="cursor-pointer rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors duration-200 hover:border-primary active:scale-[0.99]"
+          >
+            Cerrar
+          </button>
+        }
+      >
+        <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2">
+          <span className="flex-1 truncate font-mono text-sm text-foreground/70">{clientLink}</span>
+          <button
+            type="button"
+            onClick={copyLink}
+            className="flex cursor-pointer items-center gap-1 rounded-md bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-95"
+          >
+            <ClipboardDocumentIcon className="h-3.5 w-3.5" />
+            Copiar Link
+          </button>
         </div>
-      )}
+      </Modal>
 
       <Footer />
     </div>

@@ -2,10 +2,42 @@ import { useState } from 'react'
 import { PhoneIcon, ChevronDownIcon, GlobeAltIcon } from '@heroicons/react/24/outline'
 import { useLanguage } from '../../hooks/useLanguage'
 
+const FAQS = [
+  {
+    q: '¿Puedo estacionar en doble fila?',
+    a: 'No, está prohibido en cualquier horario, excepto en zonas de carga/descarga entre 06:00-09:00 y 18:00-20:00. Multa: $1,200-$2,500 MXN + remolque.',
+  },
+  {
+    q: '¿Qué hago si me piden coima?',
+    a: 'No es obligatorio dar dinero a autoridades. Puedes negarte, es tu derecho. Reporta en Contraloría CDMX (55-5242-4500) o en la app "Denuncia Vial".',
+  },
+  {
+    q: '¿Cuáles son los límites de velocidad?',
+    a: 'Zona escolar 40 km/h, zona residencial 50 km/h, avenidas 60 km/h, periférico 80 km/h. Multa por exceso: $1,500-$3,000 MXN.',
+  },
+  {
+    q: '¿Necesito verificación vehicular?',
+    a: 'Si circulas con un auto propio en CDMX, sí. Sin verificación vigente la multa es de $2,500+ MXN.',
+  },
+  {
+    q: '¿Cómo consulto si tengo multas?',
+    a: 'Puedes verificar en el portal de la Secretaría de Movilidad de CDMX (semovi.cdmx.gob.mx) con tu número de placas.',
+  },
+]
+
 function SidebarTourist({ profile }) {
-  const [faqOpen, setFaqOpen] = useState(false)
+  const [openFaqs, setOpenFaqs] = useState(new Set())
   const { t } = useLanguage()
   const guideItems = t('sidebarTourist.guideItems')
+
+  const toggleFaq = (index) => {
+    setOpenFaqs((prev) => {
+      const next = new Set(prev)
+      if (next.has(index)) next.delete(index)
+      else next.add(index)
+      return next
+    })
+  }
 
   return (
     <div className="flex h-full flex-col gap-4 overflow-y-auto rounded-xl border border-border bg-white p-5 shadow-[var(--shadow-elevation-md)]">
@@ -32,19 +64,32 @@ function SidebarTourist({ profile }) {
         </ul>
       </div>
 
-      <button
-        type="button"
-        onClick={() => setFaqOpen((v) => !v)}
-        className="flex cursor-pointer items-center justify-between rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground transition-colors duration-200 hover:border-primary"
-      >
-        {t('sidebarTourist.faq')}
-        <ChevronDownIcon className={`h-4 w-4 transition-transform duration-200 ${faqOpen ? 'rotate-180' : ''}`} />
-      </button>
-      {faqOpen && (
-        <p className="-mt-2 rounded-lg bg-muted px-4 py-3 text-sm text-foreground/60">
-          {t('sidebarTourist.faqBody')}
-        </p>
-      )}
+      <div>
+        <h3 className="mb-2 text-sm font-semibold text-foreground">{t('sidebarTourist.faq')}</h3>
+        <div className="divide-y divide-border overflow-hidden rounded-lg border border-border">
+          {FAQS.map((faq, index) => {
+            const isOpen = openFaqs.has(index)
+            return (
+              <div key={faq.q}>
+                <button
+                  type="button"
+                  onClick={() => toggleFaq(index)}
+                  aria-expanded={isOpen}
+                  className="flex w-full cursor-pointer items-center justify-between px-3 py-2.5 text-left text-sm font-medium text-foreground transition-colors duration-150 hover:bg-muted"
+                >
+                  {faq.q}
+                  <ChevronDownIcon
+                    className={`h-4 w-4 shrink-0 text-foreground/40 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                {isOpen && (
+                  <p className="animate-fade-in-up bg-muted/60 px-3 pb-3 text-sm text-foreground/60">{faq.a}</p>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      </div>
 
       <button
         type="button"

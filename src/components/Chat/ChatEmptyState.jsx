@@ -17,12 +17,12 @@ const TOPICS = {
     es: [
       { label: 'Permisos para negocio', text: '¿Qué permisos necesito para mi restaurante?' },
       { label: 'Inspecciones de Salubridad', text: '¿Qué inspecciona Salubridad?' },
-      { label: 'Protocolos de seguridad', text: '¿Qué necesito para protección civil?' },
+      { label: 'Protocolos de seguridad', text: '¿Qué necesito para evacuación?' },
     ],
     en: [
       { label: 'Business permits', text: 'What permits do I need for my restaurant?' },
       { label: 'Health inspections', text: 'What does the Health authority inspect?' },
-      { label: 'Safety protocols', text: 'What do I need for civil protection?' },
+      { label: 'Safety protocols', text: 'What do I need for evacuation?' },
     ],
   },
   private_client: {

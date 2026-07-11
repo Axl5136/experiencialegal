@@ -1,5 +1,8 @@
-import { PhoneIcon, DocumentArrowDownIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react'
+import { PhoneIcon, DocumentArrowDownIcon, EnvelopeIcon, ClockIcon } from '@heroicons/react/24/outline'
 import { useLanguage } from '../../hooks/useLanguage'
+import Modal from '../Common/Modal'
+import abogadosData from '../../data/abogados.json'
 
 const PROGRESS_BY_STATE = {
   'En investigación': 33,
@@ -15,11 +18,16 @@ const STATUS_DOT = {
 
 function SidebarPrivateClient({ profile }) {
   const { t, language } = useLanguage()
+  const [contactOpen, setContactOpen] = useState(false)
   const expediente = profile?.expediente
   const progress = PROGRESS_BY_STATE[expediente?.estado] ?? 10
   const timeline = (expediente?.cronologia ?? [])
     .filter((c) => c.visible_cliente)
     .slice(-3)
+
+  const abogado =
+    abogadosData.abogados.find((a) => expediente?.abogado_asignado && a.nombre.startsWith(expediente.abogado_asignado)) ??
+    abogadosData.abogados[0]
 
   return (
     <div className="flex h-full flex-col gap-4 overflow-y-auto rounded-xl border border-border bg-white p-5 shadow-[var(--shadow-elevation-md)]">
@@ -71,6 +79,7 @@ function SidebarPrivateClient({ profile }) {
 
       <button
         type="button"
+        onClick={() => setContactOpen(true)}
         className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
       >
         <PhoneIcon className="h-4 w-4" />
@@ -83,6 +92,56 @@ function SidebarPrivateClient({ profile }) {
         <DocumentArrowDownIcon className="h-4 w-4" />
         {t('sidebarClient.downloadDocuments')}
       </button>
+
+      <Modal
+        isOpen={contactOpen}
+        onClose={() => setContactOpen(false)}
+        title={`Contactar: ${abogado.nombre}`}
+        footer={
+          <>
+            <a
+              href={`tel:${abogado.telefono.replace(/\s+/g, '')}`}
+              className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-accent-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+            >
+              <PhoneIcon className="h-4 w-4" />
+              Llamar
+            </a>
+            <a
+              href={`mailto:${abogado.email}`}
+              className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-foreground transition-colors duration-200 hover:border-primary"
+            >
+              <EnvelopeIcon className="h-4 w-4" />
+              Email
+            </a>
+            <button
+              type="button"
+              onClick={() => setContactOpen(false)}
+              className="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-foreground/60 transition-colors duration-200 hover:text-foreground"
+            >
+              Cerrar
+            </button>
+          </>
+        }
+      >
+        <div className="space-y-2 text-sm">
+          <p>
+            <span className="font-semibold text-foreground">Especialidad:</span>{' '}
+            <span className="text-foreground/70">{abogado.especialidad}</span>
+          </p>
+          <p>
+            <span className="font-semibold text-foreground">Teléfono:</span>{' '}
+            <span className="text-foreground/70">{abogado.telefono}</span>
+          </p>
+          <p>
+            <span className="font-semibold text-foreground">Email:</span>{' '}
+            <span className="text-foreground/70">{abogado.email}</span>
+          </p>
+          <p className="flex items-center gap-1.5">
+            <ClockIcon className="h-4 w-4 text-foreground/50" />
+            <span className="text-foreground/70">{abogado.horario}</span>
+          </p>
+        </div>
+      </Modal>
     </div>
   )
 }
