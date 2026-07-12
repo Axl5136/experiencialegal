@@ -29,7 +29,9 @@ const getAllExpedientes = async (req, res) => {
       query = query.eq('cliente_id', req.user.userId)
     }
 
-    const { data, error, count } = await query.range(offset, offset + limit - 1)
+    const { data, error, count } = await query
+      .order('created_at', { ascending: true })
+      .range(offset, offset + limit - 1)
 
     if (error) throw error
 
