@@ -93,7 +93,8 @@
       "connected": "Wallet conectada",
       "hint": "Confirma la conexión y la firma en el popup de tu wallet.",
       "notInstalled": "No se detectó una wallet (instala MetaMask)",
-      "close": "Cerrar"
+      "close": "Cerrar",
+      "reconnect": "Usar otra cuenta / reconectar"
     },
     "signatureModal": {
       "title": "Acuse de recibo firmado",

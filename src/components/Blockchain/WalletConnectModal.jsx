@@ -22,12 +22,27 @@ function WalletConnectModal({ isOpen, onClose }) {
               <p className="mt-0.5 font-mono text-xs text-foreground/60">{shortAddress(wallet.address)}</p>
             </div>
           </div>
+
+          {error && (
+            <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+              {error}
+            </div>
+          )}
+
           <button
             type="button"
             onClick={onClose}
             className="w-full cursor-pointer rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity duration-200 hover:opacity-90"
           >
             {t('blockchain.walletModal.close')}
+          </button>
+          <button
+            type="button"
+            onClick={connectWallet}
+            disabled={loading}
+            className="w-full cursor-pointer text-xs font-medium text-foreground/50 underline-offset-2 hover:text-primary hover:underline disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {loading ? t('blockchain.walletModal.connecting') : t('blockchain.walletModal.reconnect')}
           </button>
         </div>
       ) : (

@@ -93,7 +93,8 @@
       "connected": "Wallet connected",
       "hint": "Confirm the connection and signature in your wallet's popup.",
       "notInstalled": "No wallet detected (install MetaMask)",
-      "close": "Close"
+      "close": "Close",
+      "reconnect": "Use another account / reconnect"
     },
     "signatureModal": {
       "title": "Signed receipt acknowledgement",
