@@ -1,19 +1,35 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { ScaleIcon } from '@heroicons/react/24/outline'
 import { useLegalAgent } from '../../hooks/useLegalAgent'
 import { useLanguage } from '../../hooks/useLanguage'
+import { useToast } from '../../hooks/useToast'
+import * as documentosService from '../../services/documentosService'
 import MessageList from './MessageList'
 import InputField from './InputField'
 import ChatEmptyState from './ChatEmptyState'
 
-function ChatBox({ role, userInitial }) {
+function ChatBox({ role, userInitial, expedienteId }) {
   const { conversation, sendMessage, isTyping, hasPriorHistory } = useLegalAgent()
   const { t, language } = useLanguage()
+  const { showToast } = useToast()
   const [inputValue, setInputValue] = useState('')
+  const fileInputRef = useRef(null)
 
   const handleSend = (text) => {
     sendMessage(text)
     setInputValue('')
+  }
+
+  const handleFileSelected = async (e) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file || !expedienteId) return
+    try {
+      const doc = await documentosService.uploadEvidenciaCliente(expedienteId, file)
+      showToast(`Archivo subido: ${doc.filename}`, 'success')
+    } catch (err) {
+      showToast(err.message || 'No se pudo subir el archivo', 'error')
+    }
   }
 
   return (
@@ -43,11 +59,16 @@ function ChatBox({ role, userInitial }) {
         />
       )}
 
+      {expedienteId && (
+        <input type="file" ref={fileInputRef} onChange={handleFileSelected} className="hidden" />
+      )}
+
       <InputField
         value={inputValue}
         onChange={setInputValue}
         onSend={handleSend}
         placeholder={t('dashboard.chatPlaceholder')}
+        onAttach={expedienteId ? () => fileInputRef.current?.click() : undefined}
       />
     </div>
   )

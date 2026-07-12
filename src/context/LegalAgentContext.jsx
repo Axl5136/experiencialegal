@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { LegalAgentContext } from './legal-agent-context'
 import { handleUserMessage } from '../utils/legalEngine'
+import * as chatService from '../services/chatService'
+import { isAuthenticated } from '../services/authService'
 
 function storageKey(userId) {
   return `conversation_${userId ?? 'anonymous'}`
@@ -15,7 +17,7 @@ function readStoredConversation(userId) {
   }
 }
 
-export function LegalAgentProvider({ profile, language, children }) {
+export function LegalAgentProvider({ profile, language, expedienteId, children }) {
   const userId = profile?.id
   const [conversation, setConversation] = useState(() => readStoredConversation(userId))
   const [isTyping, setIsTyping] = useState(false)
@@ -26,7 +28,7 @@ export function LegalAgentProvider({ profile, language, children }) {
   }, [conversation, userId])
 
   const sendMessage = useCallback(
-    (text) => {
+    async (text) => {
       const trimmed = text.trim()
       if (!trimmed) return
 
@@ -41,20 +43,43 @@ export function LegalAgentProvider({ profile, language, children }) {
       setConversation((prev) => [...prev, userMessage])
       setIsTyping(true)
 
-      window.setTimeout(() => {
-        const responseText = handleUserMessage(trimmed, profile, language)
+      // Sin sesión real (p.ej. el flujo /cliente/:hash sin login) el backend
+      // rechaza cualquier request porque todas sus rutas exigen JWT — en ese
+      // caso se conserva el motor de keywords local como fallback.
+      try {
+        let responseText
+        let metadata = { role: profile?.role, language }
+
+        if (isAuthenticated()) {
+          const res = await chatService.sendMessage(trimmed, expedienteId)
+          responseText = res.bot_response
+          metadata = { ...metadata, blocked: Boolean(res.blocked), chunksUsed: res.chunks_used ?? 0 }
+        } else {
+          responseText = handleUserMessage(trimmed, profile, language)
+        }
+
         const botMessage = {
           id: `msg-${Date.now()}-b`,
           sender: 'bot',
           text: responseText,
           timestamp: new Date().toISOString(),
-          metadata: { role: profile?.role, language },
+          metadata,
         }
         setConversation((prev) => [...prev, botMessage])
+      } catch (err) {
+        const errorMessage = {
+          id: `msg-${Date.now()}-b`,
+          sender: 'bot',
+          text: err.message || 'Ocurrió un error al contactar al asistente. Intenta de nuevo.',
+          timestamp: new Date().toISOString(),
+          metadata: { role: profile?.role, language, error: true },
+        }
+        setConversation((prev) => [...prev, errorMessage])
+      } finally {
         setIsTyping(false)
-      }, 500)
+      }
     },
-    [profile, language],
+    [profile, language, expedienteId],
   )
 
   const clearConversation = useCallback(() => {

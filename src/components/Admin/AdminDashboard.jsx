@@ -1,19 +1,43 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Header from '../Common/Header'
 import Footer from '../Common/Footer'
-import { getExpedientes } from '../../utils/storage'
+import { useToast } from '../../hooks/useToast'
+import * as expedientesService from '../../services/expedientesService'
 
 function AdminDashboard() {
   const [search, setSearch] = useState('')
-  const expedientes = getExpedientes()
+  const [expedientes, setExpedientes] = useState([])
+  const [loading, setLoading] = useState(true)
+  const { showToast } = useToast()
+
+  useEffect(() => {
+    let cancelled = false
+    expedientesService
+      .getAll({ limit: 100 })
+      .then((res) => {
+        if (!cancelled) setExpedientes(res.data)
+      })
+      .catch((err) => {
+        if (!cancelled) showToast(err.message || 'No se pudieron cargar los expedientes', 'error')
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [showToast])
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()
     if (!term) return expedientes
     return expedientes.filter(
-      (exp) => exp.cliente.toLowerCase().includes(term) || exp.tipo_caso.toLowerCase().includes(term),
+      (exp) =>
+        exp.numero?.toLowerCase().includes(term) ||
+        exp.cliente?.toLowerCase().includes(term) ||
+        exp.tipo_caso.toLowerCase().includes(term),
     )
   }, [expedientes, search])
 
@@ -76,29 +100,39 @@ function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((exp) => (
-                <tr
-                  key={exp.id}
-                  className="border-b border-border transition-colors duration-150 last:border-0 hover:bg-muted/50"
-                >
-                  <td className="px-4 py-3 font-mono text-foreground">{exp.id}</td>
-                  <td className="px-4 py-3 text-foreground/70">{exp.cliente}</td>
-                  <td className="px-4 py-3 text-foreground/70">{exp.tipo_caso}</td>
-                  <td className="px-4 py-3 text-foreground/70">{exp.estado}</td>
-                  <td className="px-4 py-3 text-foreground/70">
-                    {new Date(exp.proxima_audiencia).toLocaleDateString('es-MX')}
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <Link
-                      to={`/admin/expediente/${exp.id}`}
-                      className="cursor-pointer font-medium text-primary hover:underline"
-                    >
-                      Ver detalles
-                    </Link>
+              {!loading &&
+                filtered.map((exp) => (
+                  <tr
+                    key={exp.id}
+                    className="border-b border-border transition-colors duration-150 last:border-0 hover:bg-muted/50"
+                  >
+                    <td className="px-4 py-3 font-mono text-foreground">{exp.numero}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-foreground/70" title={exp.cliente}>
+                      {exp.cliente ? `${exp.cliente.slice(0, 8)}…` : '—'}
+                    </td>
+                    <td className="px-4 py-3 text-foreground/70">{exp.tipo_caso}</td>
+                    <td className="px-4 py-3 text-foreground/70">{exp.estado}</td>
+                    <td className="px-4 py-3 text-foreground/70">
+                      {exp.proxima_audiencia ? new Date(exp.proxima_audiencia).toLocaleDateString('es-MX') : '—'}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <Link
+                        to={`/admin/expediente/${exp.id}`}
+                        className="cursor-pointer font-medium text-primary hover:underline"
+                      >
+                        Ver detalles
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              {loading && (
+                <tr>
+                  <td colSpan={6} className="animate-pulse-soft px-4 py-6 text-center text-foreground/50">
+                    Cargando expedientes…
                   </td>
                 </tr>
-              ))}
-              {filtered.length === 0 && (
+              )}
+              {!loading && filtered.length === 0 && (
                 <tr>
                   <td colSpan={6} className="px-4 py-6 text-center text-foreground/50">
                     Sin resultados.

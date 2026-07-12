@@ -5,7 +5,6 @@ import { CheckCircleIcon as CheckCircleSolid } from '@heroicons/react/24/solid'
 import { useAuth } from '../hooks/useAuth'
 import { useLanguage } from '../hooks/useLanguage'
 import { useLoginValidation } from '../hooks/useLoginValidation'
-import usersData from '../data/users.json'
 
 const DEMO_CREDENTIALS = {
   tourist: { email: 'turista@demo.com', password: 'demo123' },
@@ -51,7 +50,7 @@ function Login() {
     setFormError('')
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     touchAll()
     setFormError('')
@@ -62,23 +61,14 @@ function Login() {
     }
     if (!isEmailValid || !isPasswordValid) return
 
-    const matched = usersData.users.find(
-      (u) =>
-        u.email.toLowerCase() === email.trim().toLowerCase() &&
-        u.password === password &&
-        u.role === role,
-    )
-
-    if (!matched) {
-      setFormError(t('login.invalidCredentials'))
-      return
-    }
-
     setStatus('verifying')
-    window.setTimeout(() => {
-      login({ id: matched.id, email: matched.email, role: matched.role, nombre: matched.nombre })
-      navigate(`/dashboard/${role}`)
-    }, 1000)
+    try {
+      const loggedInUser = await login(email.trim(), password)
+      navigate(`/dashboard/${loggedInUser.role}`)
+    } catch (err) {
+      setStatus('idle')
+      setFormError(err.message || t('login.invalidCredentials'))
+    }
   }
 
   const submitDisabled =

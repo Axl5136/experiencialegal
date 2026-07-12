@@ -1,25 +1,18 @@
 import { useState } from 'react'
 import { AuthContext } from './auth-context'
-
-function readStoredUser() {
-  try {
-    const raw = localStorage.getItem('user')
-    return raw ? JSON.parse(raw) : null
-  } catch {
-    return null
-  }
-}
+import * as authService from '../services/authService'
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(readStoredUser)
+  const [user, setUser] = useState(authService.getCurrentUser)
 
-  const login = (userData) => {
-    localStorage.setItem('user', JSON.stringify(userData))
-    setUser(userData)
+  const login = async (email, password) => {
+    const loggedInUser = await authService.login(email, password)
+    setUser(loggedInUser)
+    return loggedInUser
   }
 
-  const logout = () => {
-    localStorage.removeItem('user')
+  const logout = async () => {
+    await authService.logout()
     setUser(null)
   }
 

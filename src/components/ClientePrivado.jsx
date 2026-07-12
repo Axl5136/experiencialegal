@@ -9,6 +9,9 @@ import SidebarPrivateClient from './Sidebar/SidebarPrivateClient'
 import Placeholder from './Common/Placeholder'
 
 function ClientePrivado() {
+  // Este flujo sigue en modo mock: todas las rutas del backend requieren JWT
+  // y no existe un endpoint público de lectura por link_hash (GET /expedientes/by-hash/:hash).
+  // Para conectarlo se necesitaría agregar ese endpoint en el backend.
   const { hash } = useParams()
   const { language, setLanguage, t } = useLanguage()
   const expediente = useMemo(() => getExpedienteByHash(hash), [hash])

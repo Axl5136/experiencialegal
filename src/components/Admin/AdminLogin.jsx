@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 import { useAuth } from '../../hooks/useAuth'
-import usersData from '../../data/users.json'
 
 function AdminLogin() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [status, setStatus] = useState('idle')
   const { login } = useAuth()
   const navigate = useNavigate()
 
@@ -16,23 +16,27 @@ function AdminLogin() {
     setPassword('demo123')
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!email.trim() || !password.trim()) {
       setError('Completa email y contraseña.')
       return
     }
 
-    const matched = usersData.users.find(
-      (u) => u.email.toLowerCase() === email.trim().toLowerCase() && u.role === 'lawyer',
-    )
-
-    const user = matched
-      ? { id: matched.id, email: matched.email, role: matched.role, nombre: matched.nombre }
-      : { id: 'DEMO-LAWYER', email: email.trim(), role: 'lawyer', nombre: email.split('@')[0] }
-
-    login(user)
-    navigate('/admin/dashboard')
+    setError('')
+    setStatus('verifying')
+    try {
+      const loggedInUser = await login(email.trim(), password)
+      if (loggedInUser.role !== 'lawyer') {
+        setError('Esta cuenta no tiene acceso al panel de abogados.')
+        setStatus('idle')
+        return
+      }
+      navigate('/admin/dashboard')
+    } catch (err) {
+      setStatus('idle')
+      setError(err.message || 'Credenciales inválidas.')
+    }
   }
 
   return (
@@ -64,9 +68,10 @@ function AdminLogin() {
             {error && <p className="text-sm text-destructive">{error}</p>}
             <button
               type="submit"
-              className="mt-1 cursor-pointer rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              disabled={status === 'verifying'}
+              className="mt-1 cursor-pointer rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Iniciar sesión
+              {status === 'verifying' ? 'Verificando…' : 'Iniciar sesión'}
             </button>
           </form>
 

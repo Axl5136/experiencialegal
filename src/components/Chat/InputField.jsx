@@ -1,6 +1,7 @@
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
+import { PaperClipIcon } from '@heroicons/react/24/outline'
 
-function InputField({ value, onChange, onSend, placeholder }) {
+function InputField({ value, onChange, onSend, placeholder, onAttach }) {
   const submit = () => {
     if (!value.trim()) return
     onSend(value)
@@ -15,6 +16,16 @@ function InputField({ value, onChange, onSend, placeholder }) {
 
   return (
     <div className="flex items-center gap-2 border-t border-border bg-white p-4">
+      {onAttach && (
+        <button
+          type="button"
+          onClick={onAttach}
+          aria-label="Adjuntar archivo"
+          className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border text-foreground/60 transition-colors duration-200 hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
+          <PaperClipIcon className="h-5 w-5" />
+        </button>
+      )}
       <input
         type="text"
         value={value}

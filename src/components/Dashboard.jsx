@@ -1,8 +1,9 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { useLanguage } from '../hooks/useLanguage'
 import { getUserProfile } from '../utils/getUserProfile'
 import { LegalAgentProvider } from '../context/LegalAgentContext'
+import * as expedientesService from '../services/expedientesService'
 import Header from './Common/Header'
 import Footer from './Common/Footer'
 import ChatBox from './Chat/ChatBox'
@@ -19,11 +20,38 @@ const SIDEBARS = {
 function Dashboard() {
   const { user } = useAuth()
   const { language } = useLanguage()
-  const profile = useMemo(() => getUserProfile(user), [user])
+  const mockProfile = useMemo(() => getUserProfile(user), [user])
+  const isPrivateClient = mockProfile?.role === 'private_client'
+  const [realExpediente, setRealExpediente] = useState(null)
+
+  useEffect(() => {
+    if (!isPrivateClient) return
+    let cancelled = false
+    expedientesService
+      .getAll({ limit: 1 })
+      .then((res) => {
+        const first = res.data[0]
+        if (!first) return null
+        return expedientesService.getById(first.id)
+      })
+      .then((full) => {
+        if (!cancelled && full) setRealExpediente(full)
+      })
+      .catch(() => {
+        // Sin expediente real disponible: se conserva el mock como fallback abajo.
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [isPrivateClient])
+
+  const profile = isPrivateClient
+    ? { ...mockProfile, expediente: realExpediente ?? mockProfile.expediente }
+    : mockProfile
   const SidebarComponent = SIDEBARS[profile?.role]
 
   return (
-    <LegalAgentProvider profile={profile} language={language}>
+    <LegalAgentProvider profile={profile} language={language} expedienteId={realExpediente?.id}>
       <div className="flex h-screen flex-col bg-background">
         <Header />
 
@@ -32,6 +60,7 @@ function Dashboard() {
             <ChatBox
               role={profile?.role}
               userInitial={(profile?.nombre || profile?.role || '?').charAt(0).toUpperCase()}
+              expedienteId={isPrivateClient ? realExpediente?.id : undefined}
             />
           </section>
           <aside className="animate-fade-in-up flex-1 md:max-w-sm" style={{ animationDelay: '100ms' }}>

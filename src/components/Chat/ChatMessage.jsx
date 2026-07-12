@@ -33,12 +33,25 @@ function ChatMessage({ message, userInitial }) {
     )
   }
 
+  const blocked = message.metadata?.blocked
+  const chunksUsed = message.metadata?.chunksUsed ?? 0
+
   return (
     <div className="group animate-fade-in-up flex items-end gap-2">
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted">
         <ScaleIcon className="animate-pulse-soft h-4 w-4 text-accent" />
       </div>
       <div className="flex flex-col items-start">
+        {blocked && (
+          <span className="mb-1 ml-1 rounded-full bg-warning/15 px-2.5 py-1 text-[10px] font-medium text-warning">
+            Redirigido a tu abogado
+          </span>
+        )}
+        {!blocked && chunksUsed > 0 && (
+          <span className="mb-1 ml-1 rounded-full bg-accent/15 px-2.5 py-1 text-[10px] font-medium text-accent">
+            Basado en tus documentos
+          </span>
+        )}
         <div className="relative max-w-[85%] whitespace-pre-line rounded-2xl border-l-4 border-accent bg-gradient-to-br from-muted to-white px-4 py-3 text-sm text-foreground shadow-[var(--shadow-elevation-sm)]">
           {message.text}
           <button

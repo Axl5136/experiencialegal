@@ -3,7 +3,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 import Header from '../Common/Header'
 import Footer from '../Common/Footer'
-import { createExpediente } from '../../utils/storage'
+import { useToast } from '../../hooks/useToast'
+import * as expedientesService from '../../services/expedientesService'
 
 const TIPOS = ['Laboral', 'Penal', 'Civil', 'Comercial']
 const ESTADOS = ['En investigación', 'En juicio', 'Sentencia', 'Cerrado']
@@ -13,26 +14,30 @@ const inputClasses =
 
 function ExpedienteForm() {
   const navigate = useNavigate()
+  const { showToast } = useToast()
+  const [saving, setSaving] = useState(false)
   const [form, setForm] = useState({
-    cliente: '',
-    email_cliente: '',
+    cliente_id: '',
     tipo_caso: TIPOS[0],
     estado: ESTADOS[0],
     fecha_inicio: '',
     proxima_audiencia: '',
-    abogado: '',
     descripcion: '',
   })
 
   const update = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }))
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    const expediente = createExpediente({
-      ...form,
-      proxima_audiencia: form.proxima_audiencia ? new Date(form.proxima_audiencia).toISOString() : null,
-    })
-    navigate(`/admin/expediente/${expediente.id}`)
+    setSaving(true)
+    try {
+      const expediente = await expedientesService.create(form)
+      showToast('Expediente creado', 'success')
+      navigate(`/admin/expediente/${expediente.id}`)
+    } catch (err) {
+      showToast(err.message || 'No se pudo crear el expediente', 'error')
+      setSaving(false)
+    }
   }
 
   return (
@@ -52,18 +57,18 @@ function ExpedienteForm() {
 
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4 rounded-xl border border-border bg-white p-6 shadow-[var(--shadow-elevation-sm)]">
           <div>
-            <label className="mb-1 block text-sm font-medium text-foreground/70">Nombre cliente</label>
-            <input required value={form.cliente} onChange={update('cliente')} className={inputClasses} />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-foreground/70">Email cliente</label>
+            <label className="mb-1 block text-sm font-medium text-foreground/70">ID de cliente (UUID)</label>
             <input
               required
-              type="email"
-              value={form.email_cliente}
-              onChange={update('email_cliente')}
-              className={inputClasses}
+              placeholder="ej. 163c5363-2af7-4e15-b02c-9eef98cbbbfb"
+              value={form.cliente_id}
+              onChange={update('cliente_id')}
+              className={`${inputClasses} font-mono`}
             />
+            <p className="mt-1 text-xs text-foreground/50">
+              El backend aún no expone una búsqueda de clientes por nombre/email, así que por ahora se
+              requiere el UUID real del cliente (visible al hacer login con esa cuenta).
+            </p>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
@@ -103,19 +108,16 @@ function ExpedienteForm() {
             </div>
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-foreground/70">Abogado asignado</label>
-            <input value={form.abogado} onChange={update('abogado')} className={inputClasses} />
-          </div>
-          <div>
             <label className="mb-1 block text-sm font-medium text-foreground/70">Descripción</label>
             <textarea rows={3} value={form.descripcion} onChange={update('descripcion')} className={inputClasses} />
           </div>
 
           <button
             type="submit"
-            className="mt-2 cursor-pointer rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+            disabled={saving}
+            className="mt-2 cursor-pointer rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Guardar expediente
+            {saving ? 'Guardando…' : 'Guardar expediente'}
           </button>
         </form>
       </main>
