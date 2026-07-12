@@ -4,6 +4,7 @@ import { useLanguage } from '../hooks/useLanguage'
 import { getUserProfile } from '../utils/getUserProfile'
 import { LegalAgentProvider } from '../context/LegalAgentContext'
 import * as expedientesService from '../services/expedientesService'
+import * as documentosService from '../services/documentosService'
 import Header from './Common/Header'
 import Footer from './Common/Footer'
 import ChatBox from './Chat/ChatBox'
@@ -60,7 +61,11 @@ function Dashboard() {
             <ChatBox
               role={profile?.role}
               userInitial={(profile?.nombre || profile?.role || '?').charAt(0).toUpperCase()}
-              expedienteId={isPrivateClient ? realExpediente?.id : undefined}
+              onUploadFile={
+                isPrivateClient && realExpediente?.id
+                  ? (file) => documentosService.uploadEvidenciaCliente(realExpediente.id, file)
+                  : undefined
+              }
             />
           </section>
           <aside className="animate-fade-in-up flex-1 md:max-w-sm" style={{ animationDelay: '100ms' }}>

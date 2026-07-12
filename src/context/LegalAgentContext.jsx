@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { LegalAgentContext } from './legal-agent-context'
 import { handleUserMessage } from '../utils/legalEngine'
 import * as chatService from '../services/chatService'
+import * as publicClienteService from '../services/publicClienteService'
 import { isAuthenticated } from '../services/authService'
 
 function storageKey(userId) {
@@ -17,7 +18,7 @@ function readStoredConversation(userId) {
   }
 }
 
-export function LegalAgentProvider({ profile, language, expedienteId, children }) {
+export function LegalAgentProvider({ profile, language, expedienteId, publicHash, children }) {
   const userId = profile?.id
   const [conversation, setConversation] = useState(() => readStoredConversation(userId))
   const [isTyping, setIsTyping] = useState(false)
@@ -43,14 +44,18 @@ export function LegalAgentProvider({ profile, language, expedienteId, children }
       setConversation((prev) => [...prev, userMessage])
       setIsTyping(true)
 
-      // Sin sesión real (p.ej. el flujo /cliente/:hash sin login) el backend
-      // rechaza cualquier request porque todas sus rutas exigen JWT — en ese
-      // caso se conserva el motor de keywords local como fallback.
+      // El flujo /cliente/:hash no tiene JWT: usa el endpoint público validado
+      // por hash. Fuera de sesión y sin hash (estado roto) se cae al motor de
+      // keywords local como último fallback.
       try {
         let responseText
         let metadata = { role: profile?.role, language }
 
-        if (isAuthenticated()) {
+        if (publicHash) {
+          const res = await publicClienteService.sendMessage(publicHash, trimmed)
+          responseText = res.bot_response
+          metadata = { ...metadata, blocked: Boolean(res.blocked), chunksUsed: res.chunks_used ?? 0 }
+        } else if (isAuthenticated()) {
           const res = await chatService.sendMessage(trimmed, expedienteId)
           responseText = res.bot_response
           metadata = { ...metadata, blocked: Boolean(res.blocked), chunksUsed: res.chunks_used ?? 0 }
@@ -79,7 +84,7 @@ export function LegalAgentProvider({ profile, language, expedienteId, children }
         setIsTyping(false)
       }
     },
-    [profile, language, expedienteId],
+    [profile, language, expedienteId, publicHash],
   )
 
   const clearConversation = useCallback(() => {

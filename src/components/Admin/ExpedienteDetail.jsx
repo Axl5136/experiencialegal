@@ -38,6 +38,8 @@ function ExpedienteDetail() {
   const [fileToUpload, setFileToUpload] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [deletingDocId, setDeletingDocId] = useState(null)
+  const [addingEvento, setAddingEvento] = useState(false)
+  const [deletingEventoId, setDeletingEventoId] = useState(null)
 
   useEffect(() => {
     let cancelled = false
@@ -103,8 +105,32 @@ function ExpedienteDetail() {
     }
   }
 
-  const addEvento = () => {
-    showToast('El backend aún no expone un endpoint para agregar eventos de cronología', 'info')
+  const addEvento = async () => {
+    if (!newEvento.fecha || !newEvento.titulo) return
+    setAddingEvento(true)
+    try {
+      const evento = await expedientesService.addEvento(expediente.id, newEvento)
+      setExpediente((prev) => ({ ...prev, cronologia: [evento, ...(prev.cronologia ?? [])] }))
+      setNewEvento({ fecha: '', titulo: '' })
+      showToast('Evento agregado', 'success')
+    } catch (err) {
+      showToast(err.message || 'No se pudo agregar el evento', 'error')
+    } finally {
+      setAddingEvento(false)
+    }
+  }
+
+  const removeEvento = async (eventoId) => {
+    setDeletingEventoId(eventoId)
+    try {
+      await expedientesService.removeEvento(expediente.id, eventoId)
+      setExpediente((prev) => ({ ...prev, cronologia: (prev.cronologia ?? []).filter((e) => e.id !== eventoId) }))
+      showToast('Evento eliminado', 'success')
+    } catch (err) {
+      showToast(err.message || 'No se pudo eliminar el evento', 'error')
+    } finally {
+      setDeletingEventoId(null)
+    }
   }
 
   const handleUpload = async () => {
@@ -239,9 +265,25 @@ function ExpedienteDetail() {
           <h2 className="font-heading text-lg font-semibold text-foreground">Cronología</h2>
           <ul className="mt-3 space-y-2 border-l border-border pl-4">
             {(expediente.cronologia ?? []).map((evento) => (
-              <li key={evento.id} className="text-sm">
-                <span className="font-medium text-foreground">{evento.fecha}</span>{' '}
-                <span className="text-foreground/70">— {evento.titulo}</span>
+              <li key={evento.id} className="group flex items-center justify-between gap-2 text-sm">
+                <span>
+                  <span className="font-medium text-foreground">{evento.fecha}</span>{' '}
+                  <span className="text-foreground/70">— {evento.titulo}</span>
+                  {!evento.visible_cliente && (
+                    <span className="ml-1.5 rounded-full bg-muted px-1.5 py-0.5 text-[10px] text-foreground/50">
+                      interno
+                    </span>
+                  )}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => removeEvento(evento.id)}
+                  disabled={deletingEventoId === evento.id}
+                  aria-label="Eliminar evento"
+                  className="shrink-0 cursor-pointer text-foreground/30 opacity-0 transition-opacity duration-150 hover:text-destructive group-hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <TrashIcon className="h-3.5 w-3.5" />
+                </button>
               </li>
             ))}
             {(expediente.cronologia ?? []).length === 0 && (
@@ -266,10 +308,11 @@ function ExpedienteDetail() {
             <button
               type="button"
               onClick={addEvento}
-              className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+              disabled={addingEvento || !newEvento.fecha || !newEvento.titulo}
+              className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <PlusIcon className="h-4 w-4" />
-              Agregar evento
+              {addingEvento ? 'Agregando…' : 'Agregar evento'}
             </button>
           </div>
         </div>

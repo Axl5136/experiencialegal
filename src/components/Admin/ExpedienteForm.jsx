@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon, MagnifyingGlassIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import Header from '../Common/Header'
 import Footer from '../Common/Footer'
 import { useToast } from '../../hooks/useToast'
 import * as expedientesService from '../../services/expedientesService'
+import * as usersService from '../../services/usersService'
 
 const TIPOS = ['Laboral', 'Penal', 'Civil', 'Comercial']
 const ESTADOS = ['En investigación', 'En juicio', 'Sentencia', 'Cerrado']
@@ -25,7 +27,53 @@ function ExpedienteForm() {
     descripcion: '',
   })
 
+  const [clienteQuery, setClienteQuery] = useState('')
+  const [clienteResults, setClienteResults] = useState([])
+  const [searchingCliente, setSearchingCliente] = useState(false)
+  const [showDropdown, setShowDropdown] = useState(false)
+  const [selectedCliente, setSelectedCliente] = useState(null)
+  const searchBoxRef = useRef(null)
+
   const update = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }))
+
+  useEffect(() => {
+    if (selectedCliente || clienteQuery.trim().length < 2) {
+      return
+    }
+    const timeout = window.setTimeout(() => {
+      setSearchingCliente(true)
+      usersService
+        .searchClientes(clienteQuery.trim())
+        .then((results) => setClienteResults(results))
+        .catch(() => setClienteResults([]))
+        .finally(() => setSearchingCliente(false))
+    }, 300)
+    return () => window.clearTimeout(timeout)
+  }, [clienteQuery, selectedCliente])
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchBoxRef.current && !searchBoxRef.current.contains(e.target)) {
+        setShowDropdown(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const selectCliente = (cliente) => {
+    setSelectedCliente(cliente)
+    setForm((prev) => ({ ...prev, cliente_id: cliente.id }))
+    setClienteQuery(`${cliente.nombre} (${cliente.email})`)
+    setShowDropdown(false)
+  }
+
+  const clearCliente = () => {
+    setSelectedCliente(null)
+    setForm((prev) => ({ ...prev, cliente_id: '' }))
+    setClienteQuery('')
+    setClienteResults([])
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -56,19 +104,64 @@ function ExpedienteForm() {
         <h1 className="mt-4 font-heading text-2xl font-semibold text-foreground">Nuevo expediente</h1>
 
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4 rounded-xl border border-border bg-white p-6 shadow-[var(--shadow-elevation-sm)]">
-          <div>
-            <label className="mb-1 block text-sm font-medium text-foreground/70">ID de cliente (UUID)</label>
-            <input
-              required
-              placeholder="ej. 163c5363-2af7-4e15-b02c-9eef98cbbbfb"
-              value={form.cliente_id}
-              onChange={update('cliente_id')}
-              className={`${inputClasses} font-mono`}
-            />
-            <p className="mt-1 text-xs text-foreground/50">
-              El backend aún no expone una búsqueda de clientes por nombre/email, así que por ahora se
-              requiere el UUID real del cliente (visible al hacer login con esa cuenta).
-            </p>
+          <div ref={searchBoxRef} className="relative">
+            <label className="mb-1 block text-sm font-medium text-foreground/70">Cliente</label>
+            <div className="relative">
+              <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/40" />
+              <input
+                required
+                placeholder="Busca por nombre o email…"
+                value={clienteQuery}
+                onChange={(e) => {
+                  setClienteQuery(e.target.value)
+                  setSelectedCliente(null)
+                  setForm((prev) => ({ ...prev, cliente_id: '' }))
+                  setShowDropdown(true)
+                }}
+                onFocus={() => setShowDropdown(true)}
+                className={`${inputClasses} pl-9 ${selectedCliente ? 'pr-9' : ''}`}
+              />
+              {selectedCliente && (
+                <button
+                  type="button"
+                  onClick={clearCliente}
+                  aria-label="Quitar cliente seleccionado"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-foreground/40 hover:text-foreground/70"
+                >
+                  <XCircleIcon className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+
+            {selectedCliente && (
+              <p className="mt-1 flex items-center gap-1 text-xs text-success">
+                <CheckCircleIcon className="h-3.5 w-3.5" />
+                Cliente seleccionado: {selectedCliente.nombre}
+              </p>
+            )}
+
+            {showDropdown && !selectedCliente && clienteQuery.trim().length >= 2 && (
+              <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-border bg-white shadow-[var(--shadow-elevation-md)]">
+                {searchingCliente && (
+                  <p className="px-4 py-3 text-sm text-foreground/50">Buscando…</p>
+                )}
+                {!searchingCliente && clienteResults.length === 0 && (
+                  <p className="px-4 py-3 text-sm text-foreground/50">Sin coincidencias.</p>
+                )}
+                {!searchingCliente &&
+                  clienteResults.map((cliente) => (
+                    <button
+                      key={cliente.id}
+                      type="button"
+                      onClick={() => selectCliente(cliente)}
+                      className="flex w-full cursor-pointer flex-col items-start gap-0.5 px-4 py-2.5 text-left text-sm transition-colors duration-150 hover:bg-muted"
+                    >
+                      <span className="font-medium text-foreground">{cliente.nombre}</span>
+                      <span className="text-xs text-foreground/50">{cliente.email}</span>
+                    </button>
+                  ))}
+              </div>
+            )}
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
@@ -114,7 +207,7 @@ function ExpedienteForm() {
 
           <button
             type="submit"
-            disabled={saving}
+            disabled={saving || !form.cliente_id}
             className="mt-2 cursor-pointer rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {saving ? 'Guardando…' : 'Guardar expediente'}

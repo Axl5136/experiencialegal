@@ -104,3 +104,23 @@ export async function update(id, draft) {
 export async function remove(id) {
   await apiDelete(`/expedientes/${id}`)
 }
+
+export async function addEvento(expedienteId, { fecha, titulo, tipo = 'evento', visible_cliente = true }) {
+  const created = await apiPost(`/expedientes/${expedienteId}/cronologia`, {
+    fecha,
+    evento: titulo,
+    tipo,
+    visible_cliente,
+  })
+  return {
+    id: created.id,
+    fecha: created.fecha,
+    tipo: created.tipo,
+    titulo: created.evento,
+    visible_cliente: created.visible_cliente,
+  }
+}
+
+export async function removeEvento(expedienteId, eventoId) {
+  await apiDelete(`/expedientes/${expedienteId}/cronologia/${eventoId}`)
+}
