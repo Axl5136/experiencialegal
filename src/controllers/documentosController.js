@@ -156,6 +156,47 @@ const deleteDocumento = async (req, res) => {
   }
 }
 
+const SIGNED_URL_TTL_SECONDS = 600
+
+const getDocumentUrl = async (req, res) => {
+  try {
+    const { docId } = req.params
+
+    const { data: doc } = await supabase.from('documents').select('*').eq('id', docId).single()
+    if (!doc) {
+      return res.status(404).json({ error: 'Documento no encontrado' })
+    }
+
+    const { data: expediente } = await supabase
+      .from('expedientes')
+      .select('*')
+      .eq('id', doc.expediente_id)
+      .single()
+    if (!expediente) {
+      return res.status(404).json({ error: 'Expediente no encontrado' })
+    }
+
+    const isOwnerAbogado = req.user.role === 'abogado' && expediente.abogado_id === req.user.userId
+    const isOwnerCliente = req.user.role === 'cliente' && expediente.cliente_id === req.user.userId
+    const isAdmin = req.user.role === 'admin'
+
+    if (!isOwnerAbogado && !isOwnerCliente && !isAdmin) {
+      return res.status(403).json({ error: 'Acceso denegado' })
+    }
+
+    const { data: signed, error } = await supabase.storage
+      .from(process.env.SUPABASE_STORAGE_BUCKET)
+      .createSignedUrl(doc.file_path, SIGNED_URL_TTL_SECONDS)
+
+    if (error) throw error
+
+    res.status(200).json({ url: signed.signedUrl, expires_in: SIGNED_URL_TTL_SECONDS })
+  } catch (err) {
+    console.error('Error getDocumentUrl:', err)
+    res.status(500).json({ error: err.message })
+  }
+}
+
 const reprocessDocumento = async (req, res) => {
   try {
     const { docId } = req.params
@@ -179,5 +220,6 @@ module.exports = {
   uploadEvidenciaCliente,
   deleteDocumento,
   reprocessDocumento,
+  getDocumentUrl,
   processInline,
 }

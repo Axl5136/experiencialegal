@@ -6,6 +6,7 @@ const { authenticateToken } = require('../middleware/auth')
 const router = express.Router()
 
 router.get('/:expedienteId', authenticateToken, documentosController.getDocumentosByExpediente)
+router.get('/:docId/url', authenticateToken, documentosController.getDocumentUrl)
 router.post(
   '/:expedienteId/upload',
   authenticateToken,
