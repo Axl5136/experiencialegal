@@ -10,6 +10,7 @@ const chatRoutes = require('./routes/chat')
 const healthRoutes = require('./routes/health')
 const usersRoutes = require('./routes/users')
 const publicRoutes = require('./routes/public')
+const blockchainRoutes = require('./routes/blockchain')
 
 const app = express()
 
@@ -32,6 +33,7 @@ app.use('/api/chat', chatRoutes)
 app.use('/api/health', healthRoutes)
 app.use('/api/users', usersRoutes)
 app.use('/api/public', publicRoutes)
+app.use('/api/blockchain', blockchainRoutes)
 
 app.use(errorHandler)
 
