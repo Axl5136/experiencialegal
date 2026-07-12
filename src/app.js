@@ -8,6 +8,8 @@ const expedientesRoutes = require('./routes/expedientes')
 const documentosRoutes = require('./routes/documentos')
 const chatRoutes = require('./routes/chat')
 const healthRoutes = require('./routes/health')
+const usersRoutes = require('./routes/users')
+const publicRoutes = require('./routes/public')
 
 const app = express()
 
@@ -28,6 +30,8 @@ app.use('/api/expedientes', expedientesRoutes)
 app.use('/api/documentos', documentosRoutes)
 app.use('/api/chat', chatRoutes)
 app.use('/api/health', healthRoutes)
+app.use('/api/users', usersRoutes)
+app.use('/api/public', publicRoutes)
 
 app.use(errorHandler)
 

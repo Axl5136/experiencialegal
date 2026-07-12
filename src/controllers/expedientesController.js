@@ -190,10 +190,76 @@ const deleteExpediente = async (req, res) => {
   }
 }
 
+const addCronologia = async (req, res) => {
+  try {
+    const { id } = req.params
+    const { fecha, evento, tipo, visible_cliente } = req.body
+
+    if (!fecha || !evento) {
+      return res.status(400).json({ error: 'fecha y evento son requeridos' })
+    }
+
+    const { data: expediente } = await supabase.from('expedientes').select('*').eq('id', id).single()
+    if (!expediente) {
+      return res.status(404).json({ error: 'Expediente no encontrado' })
+    }
+
+    if (expediente.abogado_id !== req.user.userId && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Acceso denegado' })
+    }
+
+    const { data, error } = await supabase
+      .from('cronologia')
+      .insert({
+        expediente_id: id,
+        fecha,
+        evento,
+        tipo: tipo || 'evento',
+        visible_cliente: visible_cliente ?? true,
+        created_by: req.user.userId,
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+
+    res.status(201).json(data)
+  } catch (err) {
+    console.error('Error addCronologia:', err)
+    res.status(500).json({ error: err.message })
+  }
+}
+
+const removeCronologia = async (req, res) => {
+  try {
+    const { id, eventoId } = req.params
+
+    const { data: expediente } = await supabase.from('expedientes').select('*').eq('id', id).single()
+    if (!expediente) {
+      return res.status(404).json({ error: 'Expediente no encontrado' })
+    }
+
+    if (expediente.abogado_id !== req.user.userId && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Acceso denegado' })
+    }
+
+    const { error } = await supabase.from('cronologia').delete().eq('id', eventoId).eq('expediente_id', id)
+
+    if (error) throw error
+
+    res.status(204).send()
+  } catch (err) {
+    console.error('Error removeCronologia:', err)
+    res.status(500).json({ error: err.message })
+  }
+}
+
 module.exports = {
   getAllExpedientes,
   getExpedienteById,
   createExpediente,
   updateExpediente,
   deleteExpediente,
+  addCronologia,
+  removeCronologia,
 }

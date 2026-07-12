@@ -179,4 +179,5 @@ module.exports = {
   uploadEvidenciaCliente,
   deleteDocumento,
   reprocessDocumento,
+  processInline,
 }
