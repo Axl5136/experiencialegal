@@ -1,15 +1,8 @@
-const Anthropic = require('@anthropic-ai/sdk')
+const MODEL = 'gemini-3.5-flash'
+const API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models'
 
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-})
-
-// claude-3-sonnet-20240229 fue retirado (21 jul 2025). Se usa el modelo actual
-// recomendado por defecto. Sin "thinking" extendido: es un asistente de
-// preguntas cortas, no necesita razonamiento profundo, y así se mantiene
-// la latencia baja para el chat.
-const MODEL = 'claude-opus-4-8'
-
+// Sin "thinking": es un asistente de preguntas cortas, no necesita razonamiento
+// profundo, y así se mantiene la latencia y el costo bajos para el chat.
 const SYSTEM_PROMPTS = {
   turista: `Eres Asistente Legal para turistas en CDMX. Tu trabajo es dar información CLARA sobre leyes locales. PROHIBIDO: Dar asesoría legal compleja. Si es complejo, redirige a abogado. Sé breve y práctico.`,
 
@@ -30,23 +23,37 @@ function getSystemPrompt(role, expediente = null) {
   return prompt
 }
 
-async function callClaudeAPI(message, role, expediente = null) {
+async function callGeminiAPI(message, role, expediente = null) {
   const systemPrompt = getSystemPrompt(role, expediente)
 
-  const response = await client.messages.create({
-    model: MODEL,
-    max_tokens: 1024,
-    system: systemPrompt,
-    messages: [{ role: 'user', content: message }],
+  const url = `${API_BASE}/${MODEL}:generateContent?key=${process.env.GEMINI_API_KEY}`
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system_instruction: { parts: [{ text: systemPrompt }] },
+      contents: [{ role: 'user', parts: [{ text: message }] }],
+      generationConfig: { thinkingConfig: { thinkingBudget: 0 } },
+    }),
   })
 
-  const textBlock = response.content.find((block) => block.type === 'text')
+  const data = await res.json()
+
+  if (!res.ok) {
+    const err = new Error(data.error?.message || 'Error calling Gemini API')
+    err.status = res.status
+    throw err
+  }
+
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
+  const usage = data.usageMetadata || {}
 
   return {
-    text: textBlock ? textBlock.text : '',
-    tokens: response.usage.input_tokens + response.usage.output_tokens,
-    model: response.model,
+    text,
+    tokens: (usage.promptTokenCount || 0) + (usage.candidatesTokenCount || 0),
+    model: data.modelVersion || MODEL,
   }
 }
 
-module.exports = { callClaudeAPI, getSystemPrompt }
+module.exports = { callGeminiAPI, getSystemPrompt }

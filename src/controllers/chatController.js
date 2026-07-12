@@ -1,5 +1,5 @@
 const supabase = require('../utils/supabase')
-const { callClaudeAPI } = require('../utils/claude')
+const { callGeminiAPI } = require('../utils/gemini')
 
 const sendMessage = async (req, res) => {
   try {
@@ -32,7 +32,7 @@ const sendMessage = async (req, res) => {
       }
     }
 
-    const response = await callClaudeAPI(message, user.role, expediente)
+    const response = await callGeminiAPI(message, user.role, expediente)
 
     const { data: logEntry, error } = await supabase
       .from('conversation_logs')
