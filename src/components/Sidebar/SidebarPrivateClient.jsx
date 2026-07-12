@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { PhoneIcon, DocumentArrowDownIcon, EnvelopeIcon, ClockIcon, WalletIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
+import { PhoneIcon, DocumentArrowDownIcon, EnvelopeIcon, ClockIcon, WalletIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useLanguage } from '../../hooks/useLanguage'
 import { useToast } from '../../hooks/useToast'
 import { useBlockchain } from '../../hooks/useBlockchain'
+import * as documentosService from '../../services/documentosService'
 import Modal from '../Common/Modal'
 import WalletConnectModal from '../Blockchain/WalletConnectModal'
 import SignatureModal from '../Blockchain/SignatureModal'
@@ -29,8 +30,14 @@ function SidebarPrivateClient({ profile, getDocumentUrl }) {
   const [downloadingId, setDownloadingId] = useState(null)
   const [walletModalOpen, setWalletModalOpen] = useState(false)
   const [signatureDoc, setSignatureDoc] = useState(null)
+  const [deletingId, setDeletingId] = useState(null)
   const expediente = profile?.expediente
-  const documentos = expediente?.documentos ?? []
+  const [documentos, setDocumentos] = useState(expediente?.documentos ?? [])
+  const [syncedExpedienteId, setSyncedExpedienteId] = useState(expediente?.id)
+  if (expediente?.id !== syncedExpedienteId) {
+    setSyncedExpedienteId(expediente?.id)
+    setDocumentos(expediente?.documentos ?? [])
+  }
   const progress = PROGRESS_BY_STATE[expediente?.estado] ?? 10
   const timeline = (expediente?.cronologia ?? [])
     .filter((c) => c.visible_cliente)
@@ -50,6 +57,19 @@ function SidebarPrivateClient({ profile, getDocumentUrl }) {
       showToast(err.message || 'No se pudo abrir el documento', 'error')
     } finally {
       setDownloadingId(null)
+    }
+  }
+
+  const handleDelete = async (doc) => {
+    setDeletingId(doc.id)
+    try {
+      await documentosService.remove(doc.id)
+      setDocumentos((prev) => prev.filter((d) => d.id !== doc.id))
+      showToast('Documento eliminado', 'success')
+    } catch (err) {
+      showToast(err.message || 'No se pudo eliminar el documento', 'error')
+    } finally {
+      setDeletingId(null)
     }
   }
 
@@ -116,26 +136,42 @@ function SidebarPrivateClient({ profile, getDocumentUrl }) {
         ) : (
           <ul className="mt-2 space-y-1.5">
             {documentos.map((doc) => (
-              <li key={doc.id} className="flex items-center gap-1.5">
+              <li
+                key={doc.id}
+                className="flex items-center justify-between gap-2 rounded-lg border border-border px-3 py-2"
+              >
                 <button
                   type="button"
                   onClick={() => handleDownload(doc)}
                   disabled={!getDocumentUrl || downloadingId === doc.id}
-                  className="flex flex-1 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 text-left text-sm font-medium text-foreground transition-colors duration-200 hover:border-primary disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 text-left text-sm font-medium text-foreground disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <DocumentArrowDownIcon className="h-4 w-4 shrink-0 text-foreground/50" />
                   <span className="truncate">{doc.filename}</span>
                 </button>
-                {getDocumentUrl && expediente?.id && (
-                  <button
-                    type="button"
-                    onClick={() => setSignatureDoc(doc)}
-                    title={t('sidebarClient.acuseRecibo')}
-                    className="shrink-0 cursor-pointer rounded-lg border border-border p-2 text-foreground/50 transition-colors duration-200 hover:border-primary hover:text-primary"
-                  >
-                    <PencilSquareIcon className="h-4 w-4" />
-                  </button>
-                )}
+                <div className="flex shrink-0 items-center gap-1">
+                  {getDocumentUrl && expediente?.id && (
+                    <button
+                      type="button"
+                      onClick={() => setSignatureDoc(doc)}
+                      title={t('sidebarClient.acuseRecibo')}
+                      className="cursor-pointer rounded-lg p-1.5 text-foreground/40 transition-colors duration-150 hover:text-primary"
+                    >
+                      <PencilSquareIcon className="h-4 w-4" />
+                    </button>
+                  )}
+                  {doc.uploaded_by_role === 'cliente' && (
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(doc)}
+                      disabled={deletingId === doc.id}
+                      title="Eliminar documento"
+                      className="cursor-pointer rounded-lg p-1.5 text-foreground/40 transition-colors duration-150 hover:text-destructive disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      <TrashIcon className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
