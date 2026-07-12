@@ -1,10 +1,8 @@
-const { PDFParse } = require('pdf-parse')
+const pdfParse = require('pdf-parse')
 const { describeImage } = require('./gemini')
 
 const extractTextFromPDF = async (buffer) => {
-  const parser = new PDFParse({ data: buffer })
-  const result = await parser.getText()
-  await parser.destroy()
+  const result = await pdfParse(buffer)
   return result.text
 }
 
