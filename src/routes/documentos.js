@@ -19,5 +19,6 @@ router.post(
   documentosController.uploadEvidenciaCliente,
 )
 router.delete('/:docId', authenticateToken, documentosController.deleteDocumento)
+router.post('/:docId/reprocess', authenticateToken, documentosController.reprocessDocumento)
 
 module.exports = router
