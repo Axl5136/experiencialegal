@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { LanguageProvider } from './context/LanguageContext'
 import { ToastProvider } from './context/ToastContext'
+import { BlockchainProvider } from './context/BlockchainContext'
 import Landing from './components/Landing'
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
@@ -18,47 +19,49 @@ function App() {
     <ToastProvider>
       <AuthProvider>
         <LanguageProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/login" element={<Login />} />
-              <Route
-                path="/dashboard/:role"
-                element={
-                  <RequireAuth>
-                    <Dashboard />
-                  </RequireAuth>
-                }
-              />
-              <Route path="/admin" element={<AdminLogin />} />
-              <Route
-                path="/admin/dashboard"
-                element={
-                  <RequireAuth role="lawyer" redirectTo="/admin">
-                    <AdminDashboard />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/admin/expediente/nuevo"
-                element={
-                  <RequireAuth role="lawyer" redirectTo="/admin">
-                    <ExpedienteForm />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/admin/expediente/:id"
-                element={
-                  <RequireAuth role="lawyer" redirectTo="/admin">
-                    <ExpedienteDetail />
-                  </RequireAuth>
-                }
-              />
-              <Route path="/cliente/:hash" element={<ClientePrivado />} />
-              <Route path="*" element={<Placeholder title="404 - Página no encontrada" />} />
-            </Routes>
-          </BrowserRouter>
+          <BlockchainProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/dashboard/:role"
+                  element={
+                    <RequireAuth>
+                      <Dashboard />
+                    </RequireAuth>
+                  }
+                />
+                <Route path="/admin" element={<AdminLogin />} />
+                <Route
+                  path="/admin/dashboard"
+                  element={
+                    <RequireAuth role="lawyer" redirectTo="/admin">
+                      <AdminDashboard />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/admin/expediente/nuevo"
+                  element={
+                    <RequireAuth role="lawyer" redirectTo="/admin">
+                      <ExpedienteForm />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/admin/expediente/:id"
+                  element={
+                    <RequireAuth role="lawyer" redirectTo="/admin">
+                      <ExpedienteDetail />
+                    </RequireAuth>
+                  }
+                />
+                <Route path="/cliente/:hash" element={<ClientePrivado />} />
+                <Route path="*" element={<Placeholder title="404 - Página no encontrada" />} />
+              </Routes>
+            </BrowserRouter>
+          </BlockchainProvider>
         </LanguageProvider>
       </AuthProvider>
     </ToastProvider>

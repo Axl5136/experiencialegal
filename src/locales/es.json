@@ -80,6 +80,37 @@
     "updates": "Últimas actualizaciones",
     "assignedLawyer": "Abogado asignado",
     "contactLawyer": "Contactar abogado",
-    "downloadDocuments": "Descargar documentos"
+    "downloadDocuments": "Descargar documentos",
+    "acuseRecibo": "Acusar recibo",
+    "wallet": "Wallet"
+  },
+  "blockchain": {
+    "walletModal": {
+      "title": "Conectar wallet",
+      "description": "Necesitas conectar tu wallet para firmar documentos y ver tus credenciales.",
+      "connect": "Conectar MetaMask",
+      "connecting": "Conectando...",
+      "connected": "Wallet conectada",
+      "hint": "Confirma la conexión y la firma en el popup de tu wallet.",
+      "notInstalled": "No se detectó una wallet (instala MetaMask)",
+      "close": "Cerrar"
+    },
+    "signatureModal": {
+      "title": "Acuse de recibo firmado",
+      "intro": "Vas a firmar criptográficamente que recibiste este documento.",
+      "prepare": "Preparar firma",
+      "preparing": "Preparando...",
+      "confirmHint": "Se abrirá un popup pidiendo que confirmes la firma con tu wallet.",
+      "sign": "Firmar documento",
+      "signing": "Firmando...",
+      "success": "¡Firmado!",
+      "certificate": "Certificado",
+      "close": "Cerrar"
+    },
+    "credentials": {
+      "empty": "Sin credenciales verificadas",
+      "revoked": "Revocado",
+      "daysLeftSuffix": "días para vencer"
+    }
   }
 }

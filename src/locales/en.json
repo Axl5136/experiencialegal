@@ -80,6 +80,37 @@
     "updates": "Latest updates",
     "assignedLawyer": "Assigned lawyer",
     "contactLawyer": "Contact lawyer",
-    "downloadDocuments": "Download documents"
+    "downloadDocuments": "Download documents",
+    "acuseRecibo": "Acknowledge receipt",
+    "wallet": "Wallet"
+  },
+  "blockchain": {
+    "walletModal": {
+      "title": "Connect wallet",
+      "description": "You need to connect your wallet to sign documents and view your credentials.",
+      "connect": "Connect MetaMask",
+      "connecting": "Connecting...",
+      "connected": "Wallet connected",
+      "hint": "Confirm the connection and signature in your wallet's popup.",
+      "notInstalled": "No wallet detected (install MetaMask)",
+      "close": "Close"
+    },
+    "signatureModal": {
+      "title": "Signed receipt acknowledgement",
+      "intro": "You are about to cryptographically sign that you received this document.",
+      "prepare": "Prepare signature",
+      "preparing": "Preparing...",
+      "confirmHint": "A popup will open asking you to confirm the signature with your wallet.",
+      "sign": "Sign document",
+      "signing": "Signing...",
+      "success": "Signed!",
+      "certificate": "Certificate",
+      "close": "Close"
+    },
+    "credentials": {
+      "empty": "No verified credentials",
+      "revoked": "Revoked",
+      "daysLeftSuffix": "days left"
+    }
   }
 }

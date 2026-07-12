@@ -1,8 +1,12 @@
 import { useState } from 'react'
-import { PhoneIcon, DocumentArrowDownIcon, EnvelopeIcon, ClockIcon } from '@heroicons/react/24/outline'
+import { PhoneIcon, DocumentArrowDownIcon, EnvelopeIcon, ClockIcon, WalletIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 import { useLanguage } from '../../hooks/useLanguage'
 import { useToast } from '../../hooks/useToast'
+import { useBlockchain } from '../../hooks/useBlockchain'
 import Modal from '../Common/Modal'
+import WalletConnectModal from '../Blockchain/WalletConnectModal'
+import SignatureModal from '../Blockchain/SignatureModal'
+import CredentialBadges from '../Blockchain/CredentialBadges'
 import abogadosData from '../../data/abogados.json'
 
 const PROGRESS_BY_STATE = {
@@ -20,8 +24,11 @@ const STATUS_DOT = {
 function SidebarPrivateClient({ profile, getDocumentUrl }) {
   const { t, language } = useLanguage()
   const { showToast } = useToast()
+  const { connected, credentials } = useBlockchain()
   const [contactOpen, setContactOpen] = useState(false)
   const [downloadingId, setDownloadingId] = useState(null)
+  const [walletModalOpen, setWalletModalOpen] = useState(false)
+  const [signatureDoc, setSignatureDoc] = useState(null)
   const expediente = profile?.expediente
   const documentos = expediente?.documentos ?? []
   const progress = PROGRESS_BY_STATE[expediente?.estado] ?? 10
@@ -109,21 +116,62 @@ function SidebarPrivateClient({ profile, getDocumentUrl }) {
         ) : (
           <ul className="mt-2 space-y-1.5">
             {documentos.map((doc) => (
-              <li key={doc.id}>
+              <li key={doc.id} className="flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => handleDownload(doc)}
                   disabled={!getDocumentUrl || downloadingId === doc.id}
-                  className="flex w-full cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 text-left text-sm font-medium text-foreground transition-colors duration-200 hover:border-primary disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex flex-1 cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 text-left text-sm font-medium text-foreground transition-colors duration-200 hover:border-primary disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <DocumentArrowDownIcon className="h-4 w-4 shrink-0 text-foreground/50" />
                   <span className="truncate">{doc.filename}</span>
                 </button>
+                {getDocumentUrl && expediente?.id && (
+                  <button
+                    type="button"
+                    onClick={() => setSignatureDoc(doc)}
+                    title={t('sidebarClient.acuseRecibo')}
+                    className="shrink-0 cursor-pointer rounded-lg border border-border p-2 text-foreground/50 transition-colors duration-200 hover:border-primary hover:text-primary"
+                  >
+                    <PencilSquareIcon className="h-4 w-4" />
+                  </button>
+                )}
               </li>
             ))}
           </ul>
         )}
       </div>
+
+      <div>
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-foreground">{t('sidebarClient.wallet')}</h3>
+          <button
+            type="button"
+            onClick={() => setWalletModalOpen(true)}
+            className="flex cursor-pointer items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+          >
+            <WalletIcon className="h-3.5 w-3.5" />
+            {connected ? t('blockchain.walletModal.connected') : t('blockchain.walletModal.connect')}
+          </button>
+        </div>
+        {connected && (
+          <div className="mt-2">
+            <CredentialBadges credentials={credentials} />
+          </div>
+        )}
+      </div>
+
+      <WalletConnectModal isOpen={walletModalOpen} onClose={() => setWalletModalOpen(false)} />
+
+      {signatureDoc && (
+        <SignatureModal
+          isOpen={Boolean(signatureDoc)}
+          onClose={() => setSignatureDoc(null)}
+          expedienteId={expediente?.id}
+          documentId={signatureDoc.id}
+          documentName={signatureDoc.filename}
+        />
+      )}
 
       <Modal
         isOpen={contactOpen}
