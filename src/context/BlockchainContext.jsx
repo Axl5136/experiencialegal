@@ -1,9 +1,11 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { BlockchainContext } from './blockchain-context'
 import * as blockchainService from '../services/blockchainService'
+import { useAuth } from '../hooks/useAuth'
 
 export function BlockchainProvider({ children }) {
+  const { user } = useAuth()
   const [wallet, setWallet] = useState(null)
   const [chainId, setChainId] = useState(null)
   const [credentials, setCredentials] = useState([])
@@ -18,6 +20,35 @@ export function BlockchainProvider({ children }) {
       console.error('Error fetching credentials:', err)
     }
   }, [])
+
+  // Al cambiar de usuario (login/logout/otra cuenta demo) se limpia el estado
+  // de wallet de la sesion anterior antes de intentar restaurar la del nuevo.
+  const [walletSyncedUserId, setWalletSyncedUserId] = useState(undefined)
+  if (user?.id !== walletSyncedUserId) {
+    setWalletSyncedUserId(user?.id)
+    setWallet(null)
+    setCredentials([])
+  }
+
+  // Si el usuario ya tiene una wallet verificada en el backend (de una sesion
+  // anterior), la restauramos sin pedir MetaMask de nuevo.
+  useEffect(() => {
+    if (!user?.id) return undefined
+    let cancelled = false
+    blockchainService
+      .getWalletStatus()
+      .then((data) => {
+        if (cancelled || !data?.wallet_address) return undefined
+        setWallet({ address: data.wallet_address, verified: data.verified })
+        return fetchCredentials(data.wallet_address)
+      })
+      .catch(() => {
+        // Sin wallet conectada todavia: se queda en null hasta que el usuario la conecte.
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [user?.id, fetchCredentials])
 
   const connectWallet = useCallback(async () => {
     try {
