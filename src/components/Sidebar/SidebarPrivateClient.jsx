@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { PhoneIcon, DocumentArrowDownIcon, EnvelopeIcon, ClockIcon } from '@heroicons/react/24/outline'
 import { useLanguage } from '../../hooks/useLanguage'
+import { useToast } from '../../hooks/useToast'
 import Modal from '../Common/Modal'
 import abogadosData from '../../data/abogados.json'
 
@@ -16,10 +17,13 @@ const STATUS_DOT = {
   Sentencia: 'bg-success',
 }
 
-function SidebarPrivateClient({ profile }) {
+function SidebarPrivateClient({ profile, getDocumentUrl }) {
   const { t, language } = useLanguage()
+  const { showToast } = useToast()
   const [contactOpen, setContactOpen] = useState(false)
+  const [downloadingId, setDownloadingId] = useState(null)
   const expediente = profile?.expediente
+  const documentos = expediente?.documentos ?? []
   const progress = PROGRESS_BY_STATE[expediente?.estado] ?? 10
   const timeline = (expediente?.cronologia ?? [])
     .filter((c) => c.visible_cliente)
@@ -28,6 +32,19 @@ function SidebarPrivateClient({ profile }) {
   const abogado =
     abogadosData.abogados.find((a) => expediente?.abogado_asignado && a.nombre.startsWith(expediente.abogado_asignado)) ??
     abogadosData.abogados[0]
+
+  const handleDownload = async (doc) => {
+    if (!getDocumentUrl) return
+    setDownloadingId(doc.id)
+    try {
+      const { url } = await getDocumentUrl(doc.id)
+      window.open(url, '_blank', 'noopener,noreferrer')
+    } catch (err) {
+      showToast(err.message || 'No se pudo abrir el documento', 'error')
+    } finally {
+      setDownloadingId(null)
+    }
+  }
 
   return (
     <div className="flex h-full flex-col gap-4 overflow-y-auto rounded-xl border border-border bg-white p-5 shadow-[var(--shadow-elevation-md)]">
@@ -85,13 +102,28 @@ function SidebarPrivateClient({ profile }) {
         <PhoneIcon className="h-4 w-4" />
         {t('sidebarClient.contactLawyer')}
       </button>
-      <button
-        type="button"
-        className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-semibold text-foreground transition-colors duration-200 hover:border-primary"
-      >
-        <DocumentArrowDownIcon className="h-4 w-4" />
-        {t('sidebarClient.downloadDocuments')}
-      </button>
+      <div>
+        <h3 className="text-sm font-semibold text-foreground">{t('sidebarClient.downloadDocuments')}</h3>
+        {documentos.length === 0 ? (
+          <p className="mt-2 text-sm text-foreground/50">—</p>
+        ) : (
+          <ul className="mt-2 space-y-1.5">
+            {documentos.map((doc) => (
+              <li key={doc.id}>
+                <button
+                  type="button"
+                  onClick={() => handleDownload(doc)}
+                  disabled={!getDocumentUrl || downloadingId === doc.id}
+                  className="flex w-full cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 text-left text-sm font-medium text-foreground transition-colors duration-200 hover:border-primary disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <DocumentArrowDownIcon className="h-4 w-4 shrink-0 text-foreground/50" />
+                  <span className="truncate">{doc.filename}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
       <Modal
         isOpen={contactOpen}

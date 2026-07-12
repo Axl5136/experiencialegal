@@ -15,3 +15,7 @@ export function uploadEvidenciaCliente(expedienteId, file) {
 export function remove(docId) {
   return apiDelete(`/documentos/${docId}`)
 }
+
+export function getUrl(docId) {
+  return apiGet(`/documentos/${docId}/url`)
+}

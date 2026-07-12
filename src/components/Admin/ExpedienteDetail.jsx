@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeftIcon, LinkIcon, PlusIcon, ClipboardDocumentIcon, ArrowUpTrayIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon, LinkIcon, PlusIcon, ClipboardDocumentIcon, ArrowUpTrayIcon, TrashIcon, EyeIcon } from '@heroicons/react/24/outline'
 import Header from '../Common/Header'
 import Footer from '../Common/Footer'
 import Modal from '../Common/Modal'
@@ -38,6 +38,7 @@ function ExpedienteDetail() {
   const [fileToUpload, setFileToUpload] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [deletingDocId, setDeletingDocId] = useState(null)
+  const [viewingDocId, setViewingDocId] = useState(null)
   const [addingEvento, setAddingEvento] = useState(false)
   const [deletingEventoId, setDeletingEventoId] = useState(null)
 
@@ -145,6 +146,18 @@ function ExpedienteDetail() {
       showToast(err.message || 'No se pudo subir el documento', 'error')
     } finally {
       setUploading(false)
+    }
+  }
+
+  const handleViewDoc = async (docId) => {
+    setViewingDocId(docId)
+    try {
+      const { url } = await documentosService.getUrl(docId)
+      window.open(url, '_blank', 'noopener,noreferrer')
+    } catch (err) {
+      showToast(err.message || 'No se pudo abrir el documento', 'error')
+    } finally {
+      setViewingDocId(null)
     }
   }
 
@@ -335,6 +348,15 @@ function ExpedienteDetail() {
                   >
                     {PROCESSING_STATUS_LABEL[doc.processing_status] ?? doc.processing_status}
                   </span>
+                  <button
+                    type="button"
+                    onClick={() => handleViewDoc(doc.id)}
+                    disabled={viewingDocId === doc.id}
+                    aria-label="Ver documento"
+                    className="cursor-pointer text-foreground/40 transition-colors duration-150 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <EyeIcon className="h-4 w-4" />
+                  </button>
                   <button
                     type="button"
                     onClick={() => handleDeleteDoc(doc.id)}

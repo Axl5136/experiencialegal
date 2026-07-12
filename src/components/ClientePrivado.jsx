@@ -96,7 +96,10 @@ function ClientePrivado() {
             />
           </section>
           <aside className="animate-fade-in-up flex-1 md:max-w-sm" style={{ animationDelay: '100ms' }}>
-            <SidebarPrivateClient profile={profile} />
+            <SidebarPrivateClient
+              profile={profile}
+              getDocumentUrl={(docId) => publicClienteService.getDocumentUrl(hash, docId)}
+            />
           </aside>
         </main>
 

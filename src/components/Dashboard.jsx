@@ -70,7 +70,12 @@ function Dashboard() {
           </section>
           <aside className="animate-fade-in-up flex-1 md:max-w-sm" style={{ animationDelay: '100ms' }}>
             {SidebarComponent ? (
-              <SidebarComponent profile={profile} />
+              <SidebarComponent
+                profile={profile}
+                getDocumentUrl={
+                  isPrivateClient && realExpediente?.id ? (docId) => documentosService.getUrl(docId) : undefined
+                }
+              />
             ) : (
               <div className="rounded-xl border border-border bg-white p-5 text-sm text-foreground/60">
                 Rol no reconocido.
