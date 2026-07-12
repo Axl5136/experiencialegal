@@ -8,3 +8,5 @@ build/
 .vercel
 .env*
 hardhat-contracts/
+scripts/.demo-pdfs/
+scripts/.seed-2-output.json
