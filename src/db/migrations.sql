@@ -89,3 +89,67 @@ CREATE TABLE IF NOT EXISTS sessions (
 );
 
 CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
+
+-- ═══════════════════════════════════════════════
+-- BLOCKCHAIN SEPOLIA (FASE 3 - SUBFASE 3.1)
+-- ═══════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS user_wallets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  wallet_address VARCHAR(42) NOT NULL,
+  chain_id INT NOT NULL DEFAULT 11155111,
+  verified BOOLEAN DEFAULT FALSE,
+  verification_signature TEXT,
+  verification_timestamp TIMESTAMP,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now(),
+  UNIQUE(user_id, wallet_address, chain_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_wallets_user ON user_wallets(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_wallets_wallet ON user_wallets(wallet_address);
+
+CREATE TABLE IF NOT EXISTS blockchain_signatures (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  expediente_id UUID NOT NULL REFERENCES expedientes(id) ON DELETE CASCADE,
+  document_id UUID REFERENCES documents(id) ON DELETE SET NULL,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  wallet_address VARCHAR(42) NOT NULL,
+  document_hash BYTEA NOT NULL,
+  eip712_hash BYTEA NOT NULL,
+  signature TEXT NOT NULL,
+  blockchain_tx_hash VARCHAR(66),
+  blockchain_timestamp BIGINT,
+  verified BOOLEAN DEFAULT FALSE,
+  certificate_id VARCHAR(32) UNIQUE,
+  metadata JSONB,
+  created_at TIMESTAMP DEFAULT now(),
+  CONSTRAINT verified_needs_tx CHECK (verified = FALSE OR blockchain_tx_hash IS NOT NULL)
+);
+
+CREATE INDEX IF NOT EXISTS idx_blockchain_signatures_expediente ON blockchain_signatures(expediente_id);
+CREATE INDEX IF NOT EXISTS idx_blockchain_signatures_user ON blockchain_signatures(user_id);
+CREATE INDEX IF NOT EXISTS idx_blockchain_signatures_wallet ON blockchain_signatures(wallet_address);
+
+CREATE TABLE IF NOT EXISTS user_credentials (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  wallet_address VARCHAR(42) NOT NULL,
+  credential_type VARCHAR(50) NOT NULL,
+  issuer VARCHAR(255) NOT NULL,
+  sbt_token_id BIGINT,
+  blockchain_tx_hash VARCHAR(66),
+  issued_at TIMESTAMP NOT NULL,
+  expires_at TIMESTAMP,
+  revoked BOOLEAN DEFAULT FALSE,
+  revoked_at TIMESTAMP,
+  revoked_tx_hash VARCHAR(66),
+  metadata JSONB,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_credentials_user ON user_credentials(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_credentials_wallet ON user_credentials(wallet_address);
+CREATE INDEX IF NOT EXISTS idx_user_credentials_type ON user_credentials(credential_type);
